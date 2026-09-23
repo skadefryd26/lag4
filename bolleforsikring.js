@@ -1,11 +1,11 @@
 const claims = [
-  {name:'Oda Overivrig',team:'Skadeplattform',date:'2026-08-16',note:'Fristen gikk ut mens Oda antakeligvis stolte på at historikken slettet seg selv.'},
-  {name:'Peder Pult',team:'Erstatningsorkesteret',date:'2026-08-23',note:'Saken er nå dobbelt opp. Kalenderen har dessverre ingen empati.'},
-  {name:'Nora Nøkkel',team:'Vilkårsvakten',date:'2026-09-04',note:'To uker igjen. Bjarne har allerede funnet frem den passive aggressive brevmalen.'},
-  {name:'Tobias Tastatur',team:'Skadeanalyse',date:'2026-09-12',note:'Saken er ny. Vi later foreløpig som om dette kan løses uten inkasso.'},
-  {name:'Linn Lås',team:'Kundeoppgjør',date:'2026-08-09',settled:true,note:'Oppgjør godkjent. Bakverket var forsvarlig, og tilliten er under behandling.'}
+  {name:'Ida Iverig',team:'Skadeplattform',date:'2026-08-16',note:'Fristen gikk ut mens Ida antakeligvis stolte på at historikken slettet seg selv.'},
+  {name:'Trond Trippelklikk',team:'Erstatningsorkesteret',date:'2026-08-23',note:'Saken er nå dobbelt opp. Kalenderen har dessverre ingen empati.'},
+  {name:'Ulrik Utlåst',team:'Vilkårsvakten',date:'2026-09-04',note:'To uker igjen. Bjarne har allerede funnet frem den passive aggressive brevmalen.'},
+  {name:'Michelle Museskli',team:'Skadeanalyse',date:'2026-09-12',note:'Saken er ny. Vi later foreløpig som om dette kan løses uten inkasso.'},
+  {name:'Magnus Maskinpark',team:'Kundeoppgjør',date:'2026-08-09',settled:true,note:'Oppgjør godkjent. Bakverket var forsvarlig, og tilliten er under behandling.'}
 ];
-const label = {open:'AKTIV OBSERVASJON',warning:'TILTAKSVINDU LUKKES',collections:'NIVÅ RØD · BOLLEINKASSO',settled:'OPERASJON AVSLUTTET'};
+const label = {open:'ÅPEN BOLLESAK',warning:'FRIST NÆRMER SEG',collections:'BOLLEINKASSO',settled:'OPPGJORT'};
 const days = date => Math.max(0,Math.floor((Date.now()-new Date(`${date}T12:00:00`).getTime())/86400000));
 const status = claim => claim.settled?'settled':days(claim.date)>28?'collections':days(claim.date)>14?'warning':'open';
 const formatDate = date => new Intl.DateTimeFormat('nb-NO',{day:'numeric',month:'long',year:'numeric'}).format(new Date(`${date}T12:00:00`));
