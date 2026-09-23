@@ -59,13 +59,17 @@
           <span class="bjarne-preview">PREVIEW · COMING SOON</span>
         </div>
         <div class="bjarne-composer">
-          <label for="bjarne-question">Your question</label>
-          <div class="bjarne-composer__field">
-            <textarea id="bjarne-question" rows="2" placeholder="Ask about Claims, squads or where to begin…" disabled></textarea>
-            <button type="button" disabled aria-label="Send question (coming soon)">↗</button>
+          <label class="bjarne-visually-hidden" for="bjarne-question">Your question</label>
+          <textarea id="bjarne-question" rows="3" placeholder="Ask me anything" aria-describedby="bjarne-composer-note" disabled></textarea>
+          <div class="bjarne-composer__toolbar">
+            <button class="bjarne-composer__add" type="button" disabled aria-label="Add an attachment (coming soon)"><span aria-hidden="true">＋</span> Add</button>
+            <div class="bjarne-composer__actions">
+              <span class="bjarne-composer__model">Bjarne · preview <span aria-hidden="true">⌄</span></span>
+              <button class="bjarne-composer__send" type="button" disabled aria-label="Send question (coming soon)"><span aria-hidden="true">↑</span></button>
+            </div>
           </div>
-          <p>Questions aren't sent yet. Explore the guides above while Bjarne finishes his coffee.</p>
         </div>
+        <p id="bjarne-composer-note" class="bjarne-composer-note">Questions aren't sent yet. Explore the guides above while Bjarne finishes his coffee.</p>
       </section>
     </div>
   </div>
