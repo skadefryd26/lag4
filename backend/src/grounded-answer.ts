@@ -24,6 +24,7 @@ function cleanSnippet(value: string): string {
     .replace(/&quot;/gi, '"')
     .replace(/&#39;/gi, "'")
     .replace(/https?:\/\/[^\s)]+/gi, '')
+    .replace(/\[(\d+)\]/g, '($1)')
     .replace(/[`*_]/g, '')
     .replace(/\s+/g, ' ')
     .trim();

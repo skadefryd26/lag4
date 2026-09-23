@@ -11,12 +11,15 @@ const atlassian = new AtlassianMcp();
 app.disable('x-powered-by');
 app.use(express.json({ limit: '8kb' }));
 app.use('/api', (request, response, next) => {
+  response.setHeader('Cache-Control', 'private, no-store');
+  response.setHeader('Content-Security-Policy', "default-src 'none'; frame-ancestors 'none'");
+  next();
+});
+app.use((request, response, next) => {
   if (!/^(127\.0\.0\.1|localhost)(:\d+)?$/.test(request.headers.host ?? '')) {
     response.status(403).json({ error: 'This API is available only on this machine.' });
     return;
   }
-  response.setHeader('Cache-Control', 'private, no-store');
-  response.setHeader('Content-Security-Policy', "default-src 'none'; frame-ancestors 'none'");
   next();
 });
 
@@ -110,7 +113,28 @@ app.post('/api/brief', async (request, response) => {
   }
 });
 
-const server = app.listen(3300, '127.0.0.1', () => console.log('Claims evidence API listening on http://127.0.0.1:3300'));
+const siteRoot = fileURLToPath(new URL('../../', import.meta.url));
+const publicFiles = new Set([
+  'index.html', 'blueprint.html', 'systems.html', 'experience.html', 'bolleforsikring.html', 'bjarne.html',
+  'styles.css', 'script.js', 'bolleforsikring.js', 'bjarne.css', 'bjarne.js',
+]);
+app.use((_request, response, next) => {
+  response.setHeader('X-Content-Type-Options', 'nosniff');
+  response.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'");
+  next();
+});
+app.use('/assets', express.static(fileURLToPath(new URL('../../assets/', import.meta.url)), { dotfiles: 'deny', index: false }));
+app.get('/', (_request, response) => response.sendFile('index.html', { root: siteRoot }));
+app.get('/:file', (request, response) => {
+  const file = request.params.file;
+  if (typeof file !== 'string' || !publicFiles.has(file)) {
+    response.sendStatus(404);
+    return;
+  }
+  response.sendFile(file, { root: siteRoot });
+});
+
+const server = app.listen(3300, '127.0.0.1', () => console.log('Claims onboarding site listening on http://127.0.0.1:3300'));
 for (const signal of ['SIGINT', 'SIGTERM'] as const) {
   process.once(signal, () => {
     server.close();

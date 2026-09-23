@@ -68,9 +68,9 @@ test('never treats a title match alone as evidence, and reports partial results'
 
 test('uses relevant excerpts for a general question without exposing markup or raw links', () => {
   const answer = composeGroundedAnswer('What does claims-selector do?', matches(
-    source('DEMO-5', 'The <strong>claims-selector</strong> routes fictional intake work. More detail: https://example.com/private?token=fictional'),
+    source('DEMO-5', 'The <strong>claims-selector</strong> routes fictional intake [42] work. More detail: https://example.com/private?token=fictional'),
   ));
   assert.equal(answer.state, 'sources');
-  assert.match(answer.answer, /routes fictional intake work.*\[1\]/);
+  assert.match(answer.answer, /routes fictional intake \(42\) work.*\[1\]/);
   assert.doesNotMatch(answer.answer, /<strong>|example\.com|token=/);
 });
