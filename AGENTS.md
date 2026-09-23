@@ -114,10 +114,11 @@ discovered them on its own.
   on both.
 - Prefer one new file per feature. Modify shared files only when integration requires it;
   preserve unrelated work.
-- The root `index.html`, `blueprint.html`, `systems.html`, and `experience.html` are the main
-  Claims onboarding frontend. It is plain HTML, CSS, and JavaScript, with shared `styles.css`,
-  `script.js`, and local `assets/`. Read the relevant page before changing Claims content;
-  preserve the static frontend without introducing a framework or frontend build step.
+- The root `index.html` is Bjarne's welcome page, styled by `bjarne.css`. `mental-model.html`,
+  `blueprint.html`, `systems.html`, and `experience.html` are the Claims onboarding guides.
+  They are plain HTML, CSS, and JavaScript with shared `styles.css`, `script.js`, and local
+  `assets/`. Read the relevant page before changing Claims content; preserve the static frontend
+  without introducing a framework or frontend build step.
 - The separate `backend/` uses Node.js + TypeScript + Express.
 - **No internal Gjensidige packages.** Anything under `@gjensidige/` — Builders
   (`@gjensidige/builders-components`) and the rest — comes from a private registry that not
