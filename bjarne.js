@@ -129,14 +129,14 @@ document.addEventListener("DOMContentLoaded", () => {
     clearError();
     result.hidden = true;
     submit.disabled = true;
-    status.textContent = "Bjarne is comparing live Jira and Confluence excerpts…";
+    status.textContent = "Bjarne is checking current work and writing a source-grounded answer…";
     try {
       renderAnswer(await request("/api/ask", { question: value }));
       status.textContent = "Bjarne checked the available sources.";
     } catch (error) {
       status.textContent = "Bjarne could not complete the search.";
       showError(error instanceof Error ? error.message : "The search failed.");
-      retry.hidden = false;
+      retry.hidden = error instanceof Error && /^AI gateway\b/.test(error.message);
     } finally {
       submit.disabled = !connectedSite;
     }

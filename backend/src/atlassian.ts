@@ -2,6 +2,10 @@ import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import { fileURLToPath } from 'node:url';
 import { composeGroundedAnswer } from './grounded-answer.js';
+import {
+  buildWorkEvidence, parseJiraWorkItems, parseWorkQuestion, selectJiraProject,
+  type WorkEvidence, type WorkItem, type WorkPhase,
+} from './current-work.js';
 
 const MCP_URL = 'https://mcp.atlassian.com/v2/mcp';
 const DEFAULT_SITE = 'https://gjensidige.atlassian.net';
@@ -12,13 +16,13 @@ export type LiveAnswer = {
   answer: string;
   sources: LiveSource[];
   state: 'sources' | 'unknown';
-  mode: 'live-atlassian';
+  mode: 'live-atlassian' | 'ai-work-summary';
 };
 export type SearchHit = { source: LiveSource; title: string; snippet: string };
 export type SearchMatches = { hits: SearchHit[]; hasMore: boolean; partial: boolean };
 
 export class AtlassianMcpError extends Error {
-  constructor(message: string, readonly statusCode: 502 | 503 = 503) {
+  constructor(message: string, readonly statusCode: 404 | 502 | 503 = 503) {
     super(message);
   }
 }
@@ -230,6 +234,82 @@ export class AtlassianMcp {
       throw new AtlassianMcpError('Atlassian search failed. Check your connection and try again.', 502);
     }
     return composeGroundedAnswer(question, matchesFromSearch(result, this.site));
+  }
+
+  async currentWork(question: string): Promise<WorkEvidence | undefined> {
+    const workQuestion = parseWorkQuestion(question);
+    if (!workQuestion) return undefined;
+    const client = this.client;
+    const cloudId = this.cloudId;
+    if (!client || !cloudId) throw new AtlassianMcpError('Connect your Atlassian account before searching.');
+
+    let lookup: unknown;
+    try {
+      lookup = await client.callTool({
+        name: 'executeRead',
+        arguments: {
+          cloudId, name: 'listJiraProjects',
+          inputs: { cloudId, query: workQuestion.subject, maxResults: 50 },
+        },
+      }, undefined, { timeout: 30_000 });
+    } catch {
+      throw new AtlassianMcpError('Jira project lookup failed. Check your Atlassian access.', 502);
+    }
+    const projectData = payloads(lookup).find((value) => isRecord(value) && isRecord(value.data) && Array.isArray(value.data.values));
+    if (!isRecord(projectData) || !isRecord(projectData.data)) {
+      throw new AtlassianMcpError('Jira returned an invalid project list.', 502);
+    }
+    const project = selectJiraProject(projectData.data.values, workQuestion.subject);
+    if (!project) throw new AtlassianMcpError('I could not match that name to a Jira project you can access. Try its exact name or key.', 404);
+
+    const searchPage = async (phase: WorkPhase, pageToken?: string): Promise<{ items: WorkItem[]; incomplete: boolean; next?: string }> => {
+      const jql = `project = ${project.key} AND statusCategory = "${phase === 'active' ? 'In Progress' : 'To Do'}" ORDER BY updated DESC`;
+      let result: unknown;
+      try {
+        result = await client.callTool({
+          name: 'searchJiraIssuesUsingJql',
+          arguments: {
+            cloudId, jql, fields: ['summary', 'status', 'updated', 'issuetype'],
+            maxResults: 50, searchResultMode: 'issues', view: 'evidence',
+            ...(pageToken ? { nextPageToken: pageToken } : {}),
+          },
+        }, undefined, { timeout: 45_000 });
+      } catch {
+        throw new AtlassianMcpError('Jira work search failed. Check your Atlassian access.', 502);
+      }
+      const page = payloads(result).find((value) => isRecord(value) && isRecord(value.data) && Array.isArray(value.data.issues));
+      if (!isRecord(page) || !isRecord(page.data)) throw new AtlassianMcpError('Jira returned an invalid work search.', 502);
+      const parsed = parseJiraWorkItems(page.data.issues, project.key, phase);
+      const next = typeof page.data.nextPageToken === 'string' && page.data.nextPageToken && page.data.isLast !== true
+        ? page.data.nextPageToken : undefined;
+      return { ...parsed, ...(next ? { next } : {}) };
+    };
+
+    const [activePage, plannedPage] = await Promise.all([searchPage('active'), searchPage('planned')]);
+    let active = activePage.items;
+    let planned = plannedPage.items;
+    let nextActive = activePage.next;
+    let nextPlanned = plannedPage.next;
+    let incomplete = activePage.incomplete || plannedPage.incomplete;
+    let evidence = buildWorkEvidence(project.key, active, planned, this.site, workQuestion.focus);
+    if (evidence.facts.length < (workQuestion.focus ? 1 : 2)) {
+      const extraPages = await Promise.all([
+        nextActive ? searchPage('active', nextActive) : undefined,
+        nextPlanned ? searchPage('planned', nextPlanned) : undefined,
+      ]);
+      if (extraPages[0]) {
+        active = [...active, ...extraPages[0].items];
+        nextActive = extraPages[0].next;
+        incomplete ||= extraPages[0].incomplete;
+      }
+      if (extraPages[1]) {
+        planned = [...planned, ...extraPages[1].items];
+        nextPlanned = extraPages[1].next;
+        incomplete ||= extraPages[1].incomplete;
+      }
+    }
+    evidence = buildWorkEvidence(project.key, active, planned, this.site, workQuestion.focus, incomplete || Boolean(nextActive || nextPlanned));
+    return evidence;
   }
 
   async close(): Promise<void> {
