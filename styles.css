@@ -1402,3 +1402,170 @@ footer.site-footer {
   font-size: 14px;
   font-style: italic;
 }
+
+/* ==========================================================================
+   Bolleforsikring demo
+   ========================================================================== */
+
+.bowl-alert {
+  margin: 0 0 var(--unit-30);
+  padding: var(--unit-20) var(--unit-30);
+  border-left: 4px solid var(--b-purple-600);
+  border-radius: var(--radius-sm);
+  background: var(--b-blue-100);
+  color: var(--b-blue-700);
+}
+
+.bowl-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--unit-20);
+  margin-bottom: var(--unit-50);
+}
+
+.bowl-stats > div {
+  padding: var(--unit-20);
+  border: 1px solid var(--b-blue-200);
+  border-radius: var(--radius-md);
+  background: var(--b-white);
+  font-size: 13px;
+  color: var(--b-blue-600);
+}
+
+.bowl-stats strong {
+  display: block;
+  margin-bottom: 4px;
+  font-family: var(--font-display);
+  font-size: 32px;
+  line-height: 1.2;
+  color: var(--b-blue-700);
+}
+
+.bowl-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--unit-30);
+  margin-bottom: var(--unit-20);
+}
+
+.bowl-toolbar .section-title { margin-bottom: var(--unit-10); }
+.bowl-hint { margin: 0; color: var(--b-blue-600); }
+
+.bowl-button {
+  flex-shrink: 0;
+  padding: 10px var(--unit-20);
+  border: 1px solid var(--b-blue-600);
+  border-radius: var(--radius-md);
+  background: var(--b-blue-600);
+  color: var(--b-white);
+  font: 700 14px var(--font-sans);
+  cursor: pointer;
+  transition: background var(--motion-snappy);
+}
+
+.bowl-button:hover { background: var(--b-blue-700); }
+.bowl-button:focus-visible, .bowl-card button:focus-visible, .bowl-form input:focus-visible {
+  outline: 3px solid var(--b-purple-600);
+  outline-offset: 2px;
+}
+
+.bowl-form[hidden] { display: none; }
+.bowl-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) auto;
+  align-items: end;
+  gap: var(--unit-20);
+  padding: var(--unit-30);
+  margin-bottom: var(--unit-30);
+  border: 1px solid var(--b-blue-200);
+  border-radius: var(--radius-md);
+  background: var(--b-blue-100);
+}
+
+.bowl-form label { font-size: 14px; font-weight: 700; }
+.bowl-form input {
+  display: block;
+  width: 100%;
+  margin-top: var(--unit-10);
+  padding: 10px var(--unit-20);
+  border: 1px solid var(--b-blue-300);
+  border-radius: var(--radius-sm);
+  background: var(--b-white);
+  color: var(--b-blue-700);
+  font: inherit;
+}
+
+.bowl-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--unit-30);
+}
+
+.bowl-card {
+  padding: var(--unit-30);
+  border: 1px solid var(--b-blue-200);
+  border-top: 4px solid var(--b-blue-500);
+  border-radius: var(--radius-md);
+  box-shadow: 0 1px 3px rgba(9, 12, 51, 0.06);
+}
+
+.bowl-card.warning { border-top-color: #C9A400; }
+.bowl-card.collections { border-top-color: var(--b-error-200); }
+.bowl-card.settled { border-top-color: var(--b-success-200); }
+
+.bowl-card > strong {
+  display: inline-flex;
+  padding: 4px 14px;
+  border-radius: var(--radius-full, 999px);
+  background: var(--b-blue-100);
+  color: var(--b-blue-600);
+  font-size: 13px;
+}
+
+.bowl-card.warning > strong { background: var(--b-yellow-100); color: var(--b-blue-700); }
+.bowl-card.collections > strong { background: var(--b-error-100); color: var(--b-error-300); }
+.bowl-card.settled > strong { background: var(--b-success-100); color: var(--b-success-300); }
+
+.bowl-card h3 {
+  margin: var(--unit-20) 0 0;
+  font-family: var(--font-display);
+  font-size: 20px;
+}
+
+.bowl-card > p { margin: 4px 0 var(--unit-20); color: var(--b-blue-500); }
+.bowl-deadline {
+  padding: var(--unit-20);
+  border-radius: var(--radius-sm);
+  background: var(--b-blue-100);
+  font-size: 13px;
+  color: var(--b-blue-600);
+}
+
+.bowl-deadline strong { display: block; margin-bottom: 4px; color: var(--b-blue-700); font-size: 14px; }
+.bowl-progress { height: 8px; margin: var(--unit-10) 0; border-radius: var(--radius-full, 999px); background: var(--b-blue-200); overflow: hidden; }
+.bowl-progress span { display: block; height: 100%; background: var(--b-purple-600); }
+.bowl-card.warning .bowl-progress span { background: #C9A400; }
+.bowl-card.collections .bowl-progress span { background: var(--b-error-200); }
+.bowl-card .bowl-note { margin: var(--unit-20) 0; color: var(--b-blue-600); font-style: italic; }
+.bowl-card button {
+  padding: var(--unit-10) var(--unit-20);
+  border: 1px solid var(--b-blue-300);
+  border-radius: var(--radius-md);
+  background: var(--b-white);
+  color: var(--b-blue-700);
+  font: 700 14px var(--font-sans);
+  cursor: pointer;
+}
+.bowl-card button:hover { background: var(--b-blue-100); }
+
+@media (max-width: 900px) {
+  .bowl-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .bowl-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 600px) {
+  .bowl-toolbar { align-items: stretch; flex-direction: column; }
+  .bowl-form { grid-template-columns: 1fr; }
+  .bowl-stats { gap: var(--unit-10); }
+}

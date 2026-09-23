@@ -10,7 +10,61 @@
 </style>
 </head>
 <body>
-<header class="site-header"><div class="container"><nav class="top-nav"><a class="brand" href="index.html"><img src="assets/gjensidige-logo-white.svg" alt="Gjensidige" class="brand__logo"></a><ul class="nav-links"><li><a href="index.html">Mental model</a></li><li><a href="blueprint.html">Journey Blueprint</a></li><li><a href="systems.html">Systems</a></li><li><a href="experience.html">Customer Experience</a></li><li><a href="bolleforsikring.html" class="active">Bolleforsikring</a></li></ul></nav></div></header>
-<main class="container"><section class="bowl-hero"><p>BJARNES INTERNE VERKTØYKASSE</p><h1>Bolleforsikring</h1><p>Intern skadeforebygging og oppgjør for ulåste maskiner. Vi dekker ingenting. Men vi husker alt.</p></section><div class="bowl-alert" role="status" id="bowl-message">Bjarne varsler: To saker har passert fristen. Jeg har klargjort inkassobrev og et svært skuffet blikk.</div><div id="bowl-stats" class="bowl-stats"></div><div class="bowl-toolbar"><div><h2>Alle vet. Ingen glemmer.</h2><p>Tidslinjen teller ned mot Bolleinkasso. Når fristen er passert, er det dobbelt opp.</p></div><button id="bowl-toggle" class="bowl-button" type="button" aria-expanded="false">Registrer bollesak</button></div><form id="bowl-form" class="bowl-form" hidden><label>Oppdiktet navn<input name="name" placeholder="For eksempel Kari Kanel" maxlength="60" required></label><label>Oppdiktet avdeling<input name="team" placeholder="For eksempel Risiko og rør" maxlength="60" required></label><button class="bowl-button" type="submit">Opprett sak</button></form><div id="bowl-claims" class="bowl-grid"></div><p class="bowl-disclaimer">Demoversjon med oppdiktede personer og hendelser. Ingen kolleger ble hengt ut under saksbehandlingen.</p></main>
-<script src="script.js"></script><script src="bolleforsikring.js"></script>
-</body></html>
+
+<header class="site-header">
+  <div class="container">
+    <nav class="top-nav">
+      <a class="brand" href="index.html"><img src="assets/gjensidige-logo-white.svg" alt="Gjensidige" class="brand__logo"></a>
+      <ul class="nav-links">
+        <li><a href="index.html">Mental model</a></li>
+        <li><a href="blueprint.html">Journey Blueprint</a></li>
+        <li><a href="systems.html">Systems</a></li>
+        <li><a href="experience.html">Customer Experience</a></li>
+        <li><a href="bolleforsikring.html" class="active" aria-current="page">Bolleforsikring</a></li>
+      </ul>
+    </nav>
+    <div class="hero">
+      <h1 class="hero__title">Claims Tribe Onboarding</h1>
+      <p class="hero__intro">Welcome to Claims!</p>
+      <p class="hero__intro">If you're just getting started in the Claims Tribe, you're in the right place.</p>
+      <hr class="hero__divider">
+      <div class="hero__meta">
+        <div class="hero__meta-item"><span class="hero__meta-label">Level</span><span class="hero__meta-value">Everyone</span></div>
+        <div class="hero__meta-item"><span class="hero__meta-label">Format</span><span class="hero__meta-value">Interaktiv demo</span></div>
+        <div class="hero__meta-item"><span class="hero__meta-label">Version</span><span class="hero__meta-value">1.0 (20 September 2026)</span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="container">
+    <h2 class="page-title">Bolleforsikring</h2>
+    <p class="page-lede">Bjarnes interne verktøykasse for ulåste maskiner. Vi dekker ingenting. Men vi husker alt.</p>
+
+    <div class="bowl-alert" role="status" id="bowl-message">Bjarne varsler: To saker har passert fristen. Jeg har klargjort inkassobrev og et svært skuffet blikk.</div>
+    <div id="bowl-stats" class="bowl-stats" aria-label="Status for bollesaker"></div>
+
+    <section class="bowl-section" aria-labelledby="bowl-heading">
+      <div class="bowl-toolbar">
+        <div>
+          <h3 id="bowl-heading" class="section-title">Alle vet. Ingen glemmer.</h3>
+          <p class="bowl-hint">Tidslinjen teller ned mot Bolleinkasso. Når fristen er passert, er det dobbelt opp.</p>
+        </div>
+        <button id="bowl-toggle" class="bowl-button" type="button" aria-controls="bowl-form" aria-expanded="false">Registrer bollesak</button>
+      </div>
+      <form id="bowl-form" class="bowl-form" hidden>
+        <label>Oppdiktet navn<input name="name" placeholder="For eksempel Kari Kanel" maxlength="60" required></label>
+        <label>Oppdiktet avdeling<input name="team" placeholder="For eksempel Risiko og rør" maxlength="60" required></label>
+        <button class="bowl-button" type="submit">Opprett sak</button>
+      </form>
+      <div id="bowl-claims" class="bowl-grid"></div>
+    </section>
+  </div>
+</main>
+
+<footer class="site-footer"><div class="container">Demoversjon med oppdiktede personer og hendelser. Ingen kolleger ble hengt ut under saksbehandlingen.</div></footer>
+<script src="script.js"></script>
+<script src="bolleforsikring.js"></script>
+</body>
+</html>
