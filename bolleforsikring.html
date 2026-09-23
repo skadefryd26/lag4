@@ -9,7 +9,7 @@
 .bowl-hero{padding:1.5rem 2rem;background:#073b5c;color:white}.bowl-hero h1{font-size:clamp(2rem,5vw,3rem);margin:.25rem 0}.bowl-hero p{max-width:42rem;margin:.25rem 0}.bowl-alert{padding:.75rem 1rem;margin:1rem 0;background:#fff5d6;border-left:6px solid #d18800}.bowl-stats{display:grid;grid-template-columns:repeat(4,1fr);margin:1rem 0;border:1px solid #c8dfe8}.bowl-stats div{padding:.65rem 1rem;border-right:1px solid #c8dfe8}.bowl-stats strong{display:block;font-size:1.5rem}.bowl-toolbar{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin:1rem 0}.bowl-toolbar h2,.bowl-toolbar p{margin:.15rem 0}.bowl-button{border:0;background:#073b5c;color:white;padding:.65rem 1rem;cursor:pointer}.bowl-form{display:grid;grid-template-columns:1fr 1fr auto;gap:1rem;align-items:end;background:#edf6f9;padding:1rem;margin-bottom:1rem}.bowl-form label{display:block}.bowl-form input{display:block;width:100%;padding:.55rem;margin-top:.35rem}.bowl-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.75rem}.bowl-card{border:1px solid #c8dfe8;border-top:5px solid #27749a;padding:1rem}.bowl-card.warning{border-top-color:#d18800}.bowl-card.collections{border-top-color:#bd2c23;background:#fff8f7}.bowl-card.settled{border-top-color:#217a57;background:#f4fbf7}.bowl-card h3{margin:.35rem 0;font-size:1.1rem}.bowl-card p{margin:.35rem 0}.bowl-card>strong{font-size:.78rem}.bowl-deadline{padding:.6rem .75rem;background:#edf6f9;margin:.65rem 0;font-size:.82rem}.bowl-card.collections .bowl-deadline{background:#ffe9e6}.bowl-progress{height:.4rem;background:#c8dfe8;margin:.45rem 0}.bowl-progress span{display:block;height:100%;background:#d18800}.bowl-note{font-style:italic;font-size:.85rem;line-height:1.35;min-height:3.4em}.bowl-card button{padding:.5rem .75rem;cursor:pointer;font-size:.85rem}.bowl-disclaimer{margin:1rem 0;font-size:.8rem}@media(max-width:900px){.bowl-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:700px){.bowl-stats,.bowl-form{grid-template-columns:1fr 1fr}.bowl-form button{grid-column:1/-1}.bowl-toolbar{display:block}}@media(max-width:480px){.bowl-stats,.bowl-grid,.bowl-form{grid-template-columns:1fr}.bowl-hero{padding:1.25rem}.bowl-stats div{border-bottom:1px solid #c8dfe8}}
 </style>
 </head>
-<body>
+<body class="bowl-monitor">
 
 <header class="site-header">
   <div class="container">
@@ -25,9 +25,9 @@
       </ul>
     </nav>
     <div class="hero">
+      <p class="monitor-kicker">BJARNES BOLLEOVERVÅKNINGSSENTRAL</p>
       <h1 class="hero__title">Bolleforsikring</h1>
-      <p class="hero__intro">Intern skadeforebygging for maskiner som blir forlatt uten lås.</p>
-      <p class="hero__intro">Her følger Bjarne opp åpne bollesaker, forfalte frister og oppgjør. Han dekker ingenting, men han husker alt.</p>
+      <p class="hero__intro">Overvåker mistenkelig fravær av skjermlås. Dokumenterer bakeplikt. Eskalerer uten nåde.</p>
       <hr class="hero__divider">
       <div class="hero__meta">
         <div class="hero__meta-item"><span class="hero__meta-label">Dekning</span><span class="hero__meta-value">Ingenting</span></div>
@@ -40,16 +40,13 @@
 
 <main>
   <div class="container">
-    <h2 class="page-title">Bolleforsikring</h2>
-    <p class="page-lede">Bjarnes interne verktøykasse for ulåste maskiner. Vi dekker ingenting. Men vi husker alt.</p>
-
     <div class="bowl-alert" role="status" id="bowl-message">Bjarne varsler: To saker har passert fristen. Jeg har klargjort inkassobrev og et svært skuffet blikk.</div>
     <div id="bowl-stats" class="bowl-stats" aria-label="Status for bollesaker"></div>
 
     <section class="bowl-section" aria-labelledby="bowl-heading">
       <div class="bowl-toolbar">
         <div>
-          <h3 id="bowl-heading" class="section-title">Alle vet. Ingen glemmer.</h3>
+          <p class="monitor-label">KLASSIFISERT SAKSPORTFØLJE</p><h3 id="bowl-heading" class="section-title">Subjekter under observasjon</h3>
           <p class="bowl-hint">Tidslinjen teller ned mot Bolleinkasso. Når fristen er passert, er det dobbelt opp.</p>
         </div>
         <button id="bowl-toggle" class="bowl-button" type="button" aria-controls="bowl-form" aria-expanded="false">Registrer bollesak</button>
