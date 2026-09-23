@@ -286,3 +286,50 @@
 @media (prefers-reduced-motion: reduce) {
   .bjarne-home * { transition-duration: 0s !important; }
 }
+
+.bjarne-panel {
+  max-width: 56rem;
+  margin-bottom: var(--unit-30);
+  padding: var(--unit-30);
+  border: 1px solid var(--b-blue-300);
+  border-radius: var(--radius-md);
+  background: var(--b-blue-100);
+}
+.bjarne-panel h3 { margin-top: 0; }
+.bjarne-panel form { margin-top: var(--unit-20); }
+.bjarne-panel label { display: block; margin-bottom: var(--unit-10); font-weight: 700; }
+.bjarne-search-row { display: flex; gap: var(--unit-10); }
+.bjarne-search-row input {
+  flex: 1;
+  min-width: 0;
+  padding: var(--unit-10);
+  border: 1px solid var(--b-blue-400);
+  border-radius: var(--radius-sm);
+  font: inherit;
+}
+.bjarne-button {
+  min-height: 44px;
+  padding: var(--unit-10) var(--unit-20);
+  border: 1px solid var(--b-purple-700);
+  border-radius: var(--radius-sm);
+  background: var(--b-purple-700);
+  color: var(--b-white);
+  font: 700 1rem var(--font-sans);
+  cursor: pointer;
+}
+.bjarne-button--secondary { background: var(--b-white); color: var(--b-blue-700); }
+.bjarne-button:disabled { opacity: .6; cursor: not-allowed; }
+.bjarne-panel :focus-visible { outline: 3px solid var(--b-purple-600); outline-offset: 2px; }
+.bjarne-status, .bjarne-error { padding: var(--unit-10) var(--unit-20); border-radius: var(--radius-sm); }
+.bjarne-status { background: var(--b-white); }
+.bjarne-error { background: var(--b-error-100); border-left: 4px solid var(--b-error-300); }
+.bjarne-result { margin-top: var(--unit-30); border-top: 1px solid var(--b-blue-300); padding-top: var(--unit-20); }
+.bjarne-answer { white-space: pre-line; line-height: 1.6; }
+.bjarne-answer a { padding: 0 2px; color: var(--b-purple-700); font-weight: 700; }
+.bjarne-result li { margin-bottom: var(--unit-10); }
+.bjarne-result li small { display: block; color: var(--b-blue-600); }
+.bjarne-note { max-width: 56rem; color: var(--b-blue-600); font-size: .875rem; }
+@media (max-width: 600px) {
+  .bjarne-panel { padding: var(--unit-20); }
+  .bjarne-search-row { flex-direction: column; }
+}
