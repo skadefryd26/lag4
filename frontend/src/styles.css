@@ -1,4 +1,45 @@
-:root { font-family: var(--builders-font-sans); color: var(--builders-color-blue-700); background: var(--builders-color-white); }
+:root {
+  --builders-color-blue-100: #eaf4ff;
+  --builders-color-blue-200: #c9dbe9;
+  --builders-color-blue-300: #a7c3d6;
+  --builders-color-blue-500: #326b90;
+  --builders-color-blue-600: #205d86;
+  --builders-color-blue-700: #173956;
+  --builders-color-white: #fff;
+  --builders-color-yellow-100: #fff5d8;
+  --builders-color-yellow-200: #ffe393;
+  --builders-container-md: 40rem;
+  --builders-container-lg: 64rem;
+  --builders-container-xxl: 80rem;
+  --builders-focus-boxShadow: 0 0 0 3px #5656a4;
+  --builders-font-display: Georgia, serif;
+  --builders-font-sans: Arial, sans-serif;
+  --builders-font-sm: .875rem;
+  --builders-font-md: 1rem;
+  --builders-font-lg: 1.125rem;
+  --builders-font-title-1: 3rem;
+  --builders-font-title-2: 2.5rem;
+  --builders-font-title-3: 2rem;
+  --builders-font-title-4: 1.5rem;
+  --builders-font-title-5: 1.25rem;
+  --builders-font-weight-400: 400;
+  --builders-font-weight-700: 700;
+  --builders-line-height-120: 1.2;
+  --builders-line-height-140: 1.4;
+  --builders-line-height-150: 1.5;
+  --builders-radius-full: 100vw;
+  --builders-radius-md: 8px;
+  --builders-radius-sm: 4px;
+  --builders-transition: background .2s ease;
+  --builders-unit-10: .5rem;
+  --builders-unit-20: 1rem;
+  --builders-unit-30: 1.5rem;
+  --builders-unit-40: 2rem;
+  --builders-unit-50: 2.5rem;
+  font-family: var(--builders-font-sans);
+  color: var(--builders-color-blue-700);
+  background: var(--builders-color-white);
+}
 * { box-sizing: border-box; }
 body { margin: 0; }
 h1,h2,h3,p { margin-top: 0; }

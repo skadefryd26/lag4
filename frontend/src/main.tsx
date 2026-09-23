@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { MantineProvider } from '@mantine/core';
+import { Badge, Button, MantineProvider, Text } from '@mantine/core';
 import { QueryClient, QueryClientProvider, useMutation, useQuery } from '@tanstack/react-query';
-import { createRootRoute, createRoute, createRouter, RouterProvider, useNavigate, useRouterState } from '@tanstack/react-router';
-import { Badge, Button, Text } from '@gjensidige/builders-components';
-import '@gjensidige/builders-components/dist/style.css';
-import '@gjensidige/builders-fonts/dist/fonts.css';
-import '@gjensidige/builders-tokens/dist/tokens.css';
+import { createRootRoute, createRoute, createRouter, Outlet, RouterProvider, useNavigate, useRouterState } from '@tanstack/react-router';
 import '@mantine/core/styles.css';
+import { request } from './api';
+import { LiveAtlassian } from './LiveAtlassian';
 import './styles.css';
 
 type Source = { id: string; title: string; kind: string; url: string; updated: string };
@@ -16,22 +14,16 @@ type Tribe = { asOf: string; demonstration: boolean; squads: Squad[]; sources: S
 type Answer = { answer: string; squadId: string | null; sources: Source[]; state: 'supported' | 'provisional' | 'unclear' | 'unknown'; mode: string };
 type Brief = { text: string; sources: Source[]; warning: string };
 
-async function request<T>(path: string, data?: object): Promise<T> {
-  const response = await fetch(path, data ? { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) } : undefined);
-  const body = await response.json();
-  if (!response.ok) throw new Error(body.error ?? 'Request failed.');
-  return body as T;
-}
-
 const client = new QueryClient();
-const rootRoute = createRootRoute({ component: Shell });
-const indexRoute = createRoute({ getParentRoute: () => rootRoute, path: '/', component: Overview });
-const squadRoute = createRoute({ getParentRoute: () => rootRoute, path: '/squad/$squadId', component: SquadView });
-const router = createRouter({ routeTree: rootRoute.addChildren([indexRoute, squadRoute]) });
+const rootRoute = createRootRoute({ component: () => <Outlet /> });
+const indexRoute = createRoute({ getParentRoute: () => rootRoute, path: '/', component: LiveAtlassian });
+const snapshotRoute = createRoute({ getParentRoute: () => rootRoute, path: '/snapshot', component: Shell });
+const squadRoute = createRoute({ getParentRoute: () => rootRoute, path: '/squad/$squadId', component: Shell });
+const router = createRouter({ routeTree: rootRoute.addChildren([indexRoute, snapshotRoute, squadRoute]) });
 declare module '@tanstack/react-router' { interface Register { router: typeof router } }
 
 function Sources({ sources }: { sources: Source[] }) {
-  if (!sources.length) return <Text size="small">No verified source available for this claim.</Text>;
+  if (!sources.length) return <Text size="sm">No verified source available for this claim.</Text>;
   return <ul className="source-list">{sources.map((source) => <li key={source.id}><a href={source.url} target="_blank" rel="noopener noreferrer">{source.title} <span aria-hidden="true">↗</span></a><span className="source-date">{source.kind} · updated {source.updated === 'unknown' ? 'date unavailable' : source.updated}</span></li>)}</ul>;
 }
 
@@ -43,10 +35,10 @@ function Shell() {
   const { data, error, isPending } = useQuery({ queryKey: ['tribe'], queryFn: () => request<Tribe>('/api/tribe') });
   const navigate = useNavigate();
   const [question, setQuestion] = useState('Who owns claims-selector?');
-  const ask = useMutation({ mutationFn: (value: string) => request<Answer>('/api/ask', { question: value }) });
+  const ask = useMutation({ mutationFn: (value: string) => request<Answer>('/api/snapshot/ask', { question: value }) });
   const [surprise, setSurprise] = useState(false);
   return <main className="shell">
-    <header className="topbar"><a href="/" className="wordmark" onClick={(event) => { event.preventDefault(); void navigate({ to: '/' }); }}>Gjensidige <span> / Claims Tribe</span></a><span className="eyebrow">FIELD GUIDE · RESEARCH PREVIEW</span></header>
+    <header className="topbar"><a href="/snapshot" className="wordmark" onClick={(event) => { event.preventDefault(); void navigate({ to: '/snapshot' }); }}>Gjensidige <span> / Claims Tribe</span></a><span className="eyebrow">FIELD GUIDE · RESEARCH PREVIEW</span></header>
     <div className="notice" role="status">Local research demonstration. Source access reflects the researcher, not every future viewer. Never share this screen or publish this snapshot without per-user authorization.</div>
     {isPending && <p role="status">Checking the evidence…</p>}
     {error && <p role="alert">{error.message}</p>}
@@ -56,13 +48,13 @@ function Shell() {
         <RouterProviderContent data={data} />
         <section className="assistant-panel" aria-label="Ask about the tribe"><div><p className="eyebrow">ASK BJARNE · EVIDENCE FIRST</p><h2>Who owns what?</h2><p>Bjarne checks the references before he makes a claim. A revolutionary approach, apparently.</p></div>
           <form onSubmit={(event) => { event.preventDefault(); if (question.trim()) ask.mutate(question.trim()); }}>
-            <label htmlFor="question">Ask about a squad, application or contact</label><div className="search-row"><input id="question" maxLength={500} value={question} onChange={(event) => setQuestion(event.target.value)} placeholder="Who owns claims-selector?" required /><Button variant="primary" type="submit">Find answer</Button></div>
+            <label htmlFor="question">Ask about a squad, application or contact</label><div className="search-row"><input id="question" maxLength={500} value={question} onChange={(event) => setQuestion(event.target.value)} placeholder="Who owns claims-selector?" required /><Button variant="filled" type="submit">Find answer</Button></div>
           </form>
           {ask.isPending && <p role="status">Bjarne is checking the source links. Reluctantly.</p>}
           {ask.isError && <p role="alert">{ask.error.message}</p>}
-          {ask.data && <div className="answer" aria-live="polite"><Badge severity={ask.data.state === 'supported' ? 'success' : 'warning'}>{ask.data.state}</Badge><p>{ask.data.answer}</p>{ask.data.squadId && <button className="text-link" onClick={() => void navigate({ to: '/squad/$squadId', params: { squadId: ask.data!.squadId! } })}>Explore squad →</button>}<details><summary>Evidence & update dates</summary><Sources sources={ask.data.sources}/></details></div>}
+          {ask.data && <div className="answer" aria-live="polite"><Badge color={ask.data.state === 'supported' ? 'green' : 'yellow'}>{ask.data.state}</Badge><p>{ask.data.answer}</p>{ask.data.squadId && <button className="text-link" onClick={() => void navigate({ to: '/squad/$squadId', params: { squadId: ask.data!.squadId! } })}>Explore squad →</button>}<details><summary>Evidence & update dates</summary><Sources sources={ask.data.sources}/></details></div>}
         </section>
-        <section className="slack-section" aria-label="Slack surprise"><p className="eyebrow">THE WATERCOOLER</p><h2>A very serious Slack surprise</h2><p>Slack is not connected. Channel and trigger are still TBD; the button below demonstrates only the on-screen effect. It reads or posts nothing.</p><Button variant="secondary" onClick={() => setSurprise((value) => !value)}>{surprise ? 'Hide simulated surprise' : 'Preview simulated surprise'}</Button>{surprise && <div role="status" className="surprise"><span aria-hidden="true">☕ ✦ ☕</span><p>“I have reviewed all nine squads. I am requesting nine coffees.” — Bjarne</p><small>SIMULATED · no Slack message read or sent</small></div>}</section>
+        <section className="slack-section" aria-label="Slack surprise"><p className="eyebrow">THE WATERCOOLER</p><h2>A very serious Slack surprise</h2><p>Slack is not connected. Channel and trigger are still TBD; the button below demonstrates only the on-screen effect. It reads or posts nothing.</p><Button variant="outline" onClick={() => setSurprise((value) => !value)}>{surprise ? 'Hide simulated surprise' : 'Preview simulated surprise'}</Button>{surprise && <div role="status" className="surprise"><span aria-hidden="true">☕ ✦ ☕</span><p>“I have reviewed all nine squads. I am requesting nine coffees.” — Bjarne</p><small>SIMULATED · no Slack message read or sent</small></div>}</section>
       </div><footer>Built from permission-sensitive sources · missing facts stay missing · last checked {data.asOf}</footer>
     </>}
   </main>;
@@ -78,9 +70,6 @@ function RouterProviderContent({ data }: { data: Tribe }) {
   }
   return <OverviewContent data={data} />;
 }
-function Overview() { return null; }
-function SquadView() { return null; }
-
 function OverviewContent({ data }: { data: Tribe }) {
   const navigate = useNavigate();
   const [slide, setSlide] = useState(0);
@@ -97,7 +86,7 @@ function SquadContent({ data, id }: { data: Tribe; id: string }) {
   const squad = data.squads.find((item) => item.id === id);
   const brief = useMutation({ mutationFn: () => request<Brief>('/api/brief', { squadId: id }) });
   if (!squad) return <section className="detail"><h2>Squad not found</h2><button className="text-link" onClick={() => void navigate({ to: '/' })}>Back to overview</button></section>;
-  return <article className="detail"><button className="text-link" onClick={() => void navigate({ to: '/' })}>← All nine squads</button><p className="eyebrow">SQUAD DEEP DIVE</p><h2>{squad.name}</h2><p className="detail-lede">{squad.mission}</p>{squad.aliases?.length ? <p className="aliases">Also called: {squad.aliases.join(', ')}</p> : null}<div className="detail-grid"><div><FactList title="Domain" entries={[squad.domain]}/><FactList title="Applications" entries={squad.apps}/><FactList title="Systems & integrations" entries={squad.systems}/><FactList title="Current work" entries={squad.work}/></div><div><FactList title="Leadership & key people" entries={squad.leaders}/><FactList title="Other documented members" entries={squad.members ?? []}/><FactList title="How to reach them" entries={squad.contacts}/>{squad.conflicts.length > 0 && <section className="caution"><h3>Needs a closer look</h3><ul>{squad.conflicts.map((issue) => <li key={issue}>{issue}</li>)}</ul></section>}</div></div><details open className="source-details"><summary>View source trail & update dates</summary><Sources sources={data.sources.filter((source) => squad.refs.includes(source.id))}/></details><div className="ai-brief"><h3>Bjarne’s short briefing</h3><p>An AI-generated summary of the linked evidence. Check important claims against the sources below.</p><Button variant="secondary" onClick={() => brief.mutate()}>Ask Bjarne for a briefing</Button>{brief.isPending && <p role="status">Bjarne is considering doing the work…</p>}{brief.isError && <p role="alert">{brief.error.message}</p>}{brief.data && <div role="status"><p>{brief.data.text}</p><small>{brief.data.warning}</small><Sources sources={brief.data.sources}/></div>}</div></article>;
+  return <article className="detail"><button className="text-link" onClick={() => void navigate({ to: '/snapshot' })}>← All nine squads</button><p className="eyebrow">SQUAD DEEP DIVE</p><h2>{squad.name}</h2><p className="detail-lede">{squad.mission}</p>{squad.aliases?.length ? <p className="aliases">Also called: {squad.aliases.join(', ')}</p> : null}<div className="detail-grid"><div><FactList title="Domain" entries={[squad.domain]}/><FactList title="Applications" entries={squad.apps}/><FactList title="Systems & integrations" entries={squad.systems}/><FactList title="Current work" entries={squad.work}/></div><div><FactList title="Leadership & key people" entries={squad.leaders}/><FactList title="Other documented members" entries={squad.members ?? []}/><FactList title="How to reach them" entries={squad.contacts}/>{squad.conflicts.length > 0 && <section className="caution"><h3>Needs a closer look</h3><ul>{squad.conflicts.map((issue) => <li key={issue}>{issue}</li>)}</ul></section>}</div></div><details open className="source-details"><summary>View source trail & update dates</summary><Sources sources={data.sources.filter((source) => squad.refs.includes(source.id))}/></details><div className="ai-brief"><h3>Bjarne’s short briefing</h3><p>An AI-generated summary of the linked evidence. Check important claims against the sources below.</p><Button variant="outline" onClick={() => brief.mutate()}>Ask Bjarne for a briefing</Button>{brief.isPending && <p role="status">Bjarne is considering doing the work…</p>}{brief.isError && <p role="alert">{brief.error.message}</p>}{brief.data && <div role="status"><p>{brief.data.text}</p><small>{brief.data.warning}</small><Sources sources={brief.data.sources}/></div>}</div></article>;
 }
 
-createRoot(document.getElementById('root')!).render(<React.StrictMode><MantineProvider><QueryClientProvider client={client}><RouterProvider router={router} /></QueryClientProvider></MantineProvider></React.StrictMode>);
+createRoot(document.getElementById('root')!).render(<React.StrictMode><MantineProvider theme={{ primaryColor: 'indigo', fontFamily: 'Arial, sans-serif', headings: { fontFamily: 'Georgia, serif' } }}><QueryClientProvider client={client}><RouterProvider router={router} /></QueryClientProvider></MantineProvider></React.StrictMode>);

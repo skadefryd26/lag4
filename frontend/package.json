@@ -5,9 +5,6 @@
   "type": "module",
   "scripts": { "dev": "vite --host 127.0.0.1", "build": "tsc -b && vite build" },
   "dependencies": {
-    "@gjensidige/builders-components": "^2.12.3",
-    "@gjensidige/builders-fonts": "^2.2.0",
-    "@gjensidige/builders-tokens": "^2.3.0",
     "@mantine/core": "^8.3.0",
     "@mantine/hooks": "^8.3.0",
     "@tanstack/react-query": "^5.85.0",

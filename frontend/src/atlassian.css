@@ -1,0 +1,31 @@
+.live-shell { min-height: 100vh; background: #f3f7fa; color: #173956; display: flex; flex-direction: column; }
+.live-header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1.25rem clamp(1.25rem, 5vw, 3.5rem); background: #fff; border-bottom: 1px solid #c9dbe9; }
+.live-wordmark { font: 700 1.3rem Georgia, serif; white-space: nowrap; }
+.live-wordmark span { font: 400 .9rem Arial, sans-serif; }
+.live-content { width: min(100%, 74rem); margin: 0 auto; padding: 3.5rem clamp(1.25rem, 5vw, 3.5rem) 4rem; flex: 1; }
+.live-eyebrow { color: #326b90; font-size: .75rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+.live-hero { max-width: 48rem; margin-bottom: 2.5rem; }
+.live-hero h1 { font: 700 clamp(2.5rem, 6vw, 4.5rem)/1.05 Georgia, serif; margin-bottom: 1.25rem; }
+.live-hero h1 em { color: #5656a4; font-style: normal; }
+.live-hero > p:last-child { font-size: 1.13rem; line-height: 1.6; }
+.live-card { background: #fff; border: 1px solid #c9dbe9; border-radius: 12px; box-shadow: 0 14px 34px #17395612; padding: clamp(1.5rem, 4vw, 3rem); }
+.live-card-heading { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.live-card-heading h2 { font: 700 clamp(1.5rem, 3vw, 2rem) Georgia, serif; }
+.live-coffee { font-size: 2.5rem; }
+.live-card form label { display: block; font-weight: 700; margin: 1.5rem 0 .5rem; }
+.live-search-row { display: flex; gap: .75rem; }
+.live-search-row input { flex: 1; min-width: 0; padding: .8rem 1rem; border-radius: 6px; border: 1px solid #688aa2; color: inherit; }
+.live-search-row input:focus-visible, .live-shell button:focus-visible, .live-shell a:focus-visible { outline: 3px solid #5656a4; outline-offset: 2px; }
+.live-status { margin: 1rem 0; padding: .8rem 1rem; background: #eaf4ff; border-radius: 6px; }
+.live-status .mantine-Badge-root { margin-right: .5rem; }
+.live-error { margin: 1rem 0; padding: 1rem; background: #fff1ed; border-left: 4px solid #bc5044; }
+.live-error p { margin-bottom: .75rem; }
+.live-answer { margin-top: 1.5rem; border-top: 1px solid #c9dbe9; padding-top: 1.5rem; }
+.live-answer > p { margin: 1rem 0; line-height: 1.5; }
+.live-answer ul { list-style: none; margin: 0; padding: 0; }
+.live-answer li { padding: 1rem 0; border-top: 1px solid #e1ebf2; }
+.live-answer a { font-weight: 700; color: #205d86; }
+.live-answer small { display: block; margin-top: .2rem; color: #45637a; }
+.live-note { max-width: 56rem; margin-top: 1.5rem; font-size: .9rem; line-height: 1.5; color: #45637a; }
+.live-footer { background: #173956; color: #fff; padding: 1.25rem clamp(1.25rem, 5vw, 3.5rem); font-size: .85rem; }
+@media (max-width: 40rem) { .live-header { flex-wrap: wrap; } .live-search-row { flex-direction: column; } .live-search-row button { min-height: 44px; } }

@@ -1,27 +1,56 @@
 import express from 'express';
 import { config } from 'dotenv';
 import { fileURLToPath } from 'node:url';
+import { AtlassianMcp, AtlassianMcpError } from './atlassian.js';
 import { answerQuestion, loadEvidence } from './evidence.js';
 
 config({ path: fileURLToPath(new URL('../../.env.local', import.meta.url)) });
 
 const app = express();
+const atlassian = new AtlassianMcp();
 app.disable('x-powered-by');
 app.use(express.json({ limit: '8kb' }));
-app.use('/api', (_request, response, next) => {
+app.use('/api', (request, response, next) => {
+  if (!/^(127\.0\.0\.1|localhost)(:\d+)?$/.test(request.headers.host ?? '')) {
+    response.status(403).json({ error: 'This API is available only on this machine.' });
+    return;
+  }
   response.setHeader('Cache-Control', 'private, no-store');
   response.setHeader('Content-Security-Policy', "default-src 'none'; frame-ancestors 'none'");
   next();
 });
 
-// This demo binds to loopback only. An authenticated multi-user deployment must replace this
-// gate with delegated OAuth source access and filter evidence BEFORE building any answer.
-app.use('/api', (_request, response, next) => {
+app.use(['/api/tribe', '/api/snapshot/ask', '/api/brief'], (_request, response, next) => {
   if (process.env.LOCAL_RESEARCH_DEMO !== 'true') {
     response.status(403).json({ error: 'Internal source data is disabled. Enable the explicitly local, single-user research demo or configure per-user delegated access.' });
     return;
   }
   next();
+});
+
+app.get('/api/atlassian/status', (_request, response) => response.json(atlassian.status()));
+
+app.post('/api/atlassian/connect', async (_request, response) => {
+  try {
+    response.json(await atlassian.connect());
+  } catch (error) {
+    const known = error instanceof AtlassianMcpError ? error : new AtlassianMcpError('Atlassian connection failed.');
+    response.status(known.statusCode).json({ error: known.message });
+  }
+});
+
+app.post('/api/ask', async (request, response) => {
+  const question: unknown = request.body?.question;
+  if (typeof question !== 'string' || !question.trim() || question.length > 500) {
+    response.status(400).json({ error: 'Enter a question of 1–500 characters.' });
+    return;
+  }
+  try {
+    response.json(await atlassian.search(question.trim()));
+  } catch (error) {
+    const known = error instanceof AtlassianMcpError ? error : new AtlassianMcpError('Atlassian search failed.', 502);
+    response.status(known.statusCode).json({ error: known.message });
+  }
 });
 
 app.get('/api/tribe', async (_request, response) => {
@@ -33,7 +62,7 @@ app.get('/api/tribe', async (_request, response) => {
   }
 });
 
-app.post('/api/ask', async (request, response) => {
+app.post('/api/snapshot/ask', async (request, response) => {
   const question: unknown = request.body?.question;
   if (typeof question !== 'string' || !question.trim() || question.length > 500) {
     response.status(400).json({ error: 'Enter a question of 1–500 characters.' });
@@ -57,7 +86,6 @@ app.post('/api/brief', async (request, response) => {
   const data = await loadEvidence();
   const squad = data.squads.find((entry) => entry.id === squadId);
   if (!squad) { response.status(404).json({ error: 'Squad not found.' }); return; }
-  if (process.env.LOCAL_RESEARCH_DEMO !== 'true') { response.status(403).json({ error: 'Local research demonstration is disabled.' }); return; }
   const token = process.env.AI_GATEWAY_TOKEN;
   if (!token) { response.status(503).json({ error: 'AI gateway token unavailable; verified source details remain accessible.' }); return; }
   const sources = data.sources.filter((source) => squad.refs.includes(source.id));
@@ -82,4 +110,13 @@ app.post('/api/brief', async (request, response) => {
   }
 });
 
-app.listen(3300, '127.0.0.1', () => console.log('Claims evidence API listening on http://127.0.0.1:3300'));
+const server = app.listen(3300, '127.0.0.1', () => console.log('Claims evidence API listening on http://127.0.0.1:3300'));
+for (const signal of ['SIGINT', 'SIGTERM'] as const) {
+  process.once(signal, () => {
+    server.close();
+    void atlassian.close().catch(() => {
+      console.error('Atlassian MCP client did not close cleanly.');
+      process.exitCode = 1;
+    });
+  });
+}
