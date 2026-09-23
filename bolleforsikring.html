@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bolleforsikring — Claims Tribe Onboarding</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <nav class="top-nav">
+      <a class="brand" href="index.html"><img src="assets/gjensidige-logo-white.svg" alt="Gjensidige" class="brand__logo"></a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="mental-model.html">Mental model</a></li>
+        <li><a href="blueprint.html">Journey Blueprint</a></li>
+        <li><a href="systems.html">Systems</a></li>
+        <li><a href="experience.html">Customer Experience</a></li>
+        <li><a href="bolleforsikring.html" class="active" aria-current="page">Bolleforsikring</a></li>
+        <li><a href="bjarne.html">Ask Bjarne</a></li>
+      </ul>
+    </nav>
+    <div class="hero">
+      <h1 class="hero__title">Bolleforsikring</h1>
+      <p class="hero__intro">En leken oversikt over bollesaker, frister og oppgjør etter ulåste maskiner.</p>
+      <hr class="hero__divider">
+      <div class="hero__meta">
+        <div class="hero__meta-item"><span class="hero__meta-label">Dekning</span><span class="hero__meta-value">Ingenting</span></div>
+        <div class="hero__meta-item"><span class="hero__meta-label">Oppgjørsfrist</span><span class="hero__meta-value">4 uker</span></div>
+        <div class="hero__meta-item"><span class="hero__meta-label">Ved forfall</span><span class="hero__meta-value">Bolleinkasso</span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="container">
+    <div class="bowl-alert" role="status" id="bowl-message">Bjarne varsler: To saker har passert fristen. Jeg har klargjort inkassobrev og et svært skuffet blikk.</div>
+    <div id="bowl-stats" class="bowl-stats" aria-label="Status for bollesaker"></div>
+
+    <section class="bowl-section" aria-labelledby="bowl-heading">
+      <div class="bowl-toolbar">
+        <div>
+          <h3 id="bowl-heading" class="section-title">Alle vet. Ingen glemmer.</h3>
+          <p class="bowl-hint">Tidslinjen teller ned mot Bolleinkasso. Når fristen er passert, er det dobbelt opp.</p>
+        </div>
+        <button id="bowl-toggle" class="bowl-button" type="button" aria-controls="bowl-form" aria-expanded="false">Registrer bollesak</button>
+      </div>
+      <form id="bowl-form" class="bowl-form" hidden>
+        <label>Oppdiktet navn<input name="name" placeholder="For eksempel Kari Kanel" maxlength="60" required></label>
+        <label>Oppdiktet avdeling<input name="team" placeholder="For eksempel Risiko og rør" maxlength="60" required></label>
+        <button class="bowl-button" type="submit">Opprett sak</button>
+      </form>
+      <div id="bowl-claims" class="bowl-grid"></div>
+    </section>
+  </div>
+</main>
+
+<footer class="site-footer"><div class="container">Demoversjon med oppdiktede personer og hendelser. Ingen kolleger ble hengt ut under saksbehandlingen.</div></footer>
+<script src="script.js"></script>
+<script src="bolleforsikring.js"></script>
+</body>
+</html>

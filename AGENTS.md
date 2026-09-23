@@ -114,11 +114,12 @@ discovered them on its own.
   on both.
 - Prefer one new file per feature. Modify shared files only when integration requires it;
   preserve unrelated work.
-- `claims-onboarding-site/` is a static reference prototype for Claims onboarding. Read its nested
-  `AGENTS.md` and the relevant page before designing or implementing related work; do not treat it
-  as the main application or replace it without an explicit request.
-- Use React + TypeScript + Vite, TanStack Router, TanStack Query, and Mantine on the frontend.
-  Use Node.js + TypeScript + Express on the backend.
+- The root `index.html` is Bjarne's welcome page, styled by `bjarne.css`. `mental-model.html`,
+  `blueprint.html`, `systems.html`, and `experience.html` are the Claims onboarding guides.
+  They are plain HTML, CSS, and JavaScript with shared `styles.css`, `script.js`, and local
+  `assets/`. Read the relevant page before changing Claims content; preserve the static frontend
+  without introducing a framework or frontend build step.
+- The separate `backend/` uses Node.js + TypeScript + Express.
 - **No internal Gjensidige packages.** Anything under `@gjensidige/` — Builders
   (`@gjensidige/builders-components`) and the rest — comes from a private registry that not
   everyone on the team can reach. See `skadefryd-fullstack-feature`.
