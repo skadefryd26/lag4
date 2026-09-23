@@ -1,0 +1,21 @@
+# Local AI collaboration preference. Each participant creates their own copy.
+.ai/user-profile.md
+
+# Deltakerlister for scripts/opprett-lag.sh inneholder personopplysninger.
+*.csv
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# JavaScript dependencies and build output
+node_modules/
+dist/
+coverage/
+
+# Skjermbildet scripts/sjekk-appen.mjs legger igjen
+sjekk-appen.png
+
+# Mellomsteget lagark.py lager før PDF-en
+arrangor/lagark/lagark.html

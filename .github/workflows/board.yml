@@ -1,0 +1,31 @@
+# Holder lagets board oppdatert ut fra issues og pull requests, så verken
+# deltakerne eller kodeagentene deres trenger å tenke på det.
+#
+# Krever org-secreten SKADEFRYD_BOARD_TOKEN (se «For arrangører» i README).
+# Mangler den, hopper workflowen stille over.
+name: Board
+
+on:
+  issues:
+    types: [opened, edited, closed, reopened, assigned, unassigned, labeled, unlabeled]
+  pull_request:
+    types: [opened, edited, closed, reopened]
+
+concurrency:
+  group: board
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.SKADEFRYD_BOARD_TOKEN }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/checkout@v4
+        if: env.GH_TOKEN != ''
+      - run: node .github/skills/skadefryd-tasks/board.mjs sync
+        if: env.GH_TOKEN != ''

@@ -1,0 +1,7 @@
+# Windows and macOS use different line endings. Without this, a file saved on
+# Windows looks entirely rewritten to everyone else, and the team gets merge
+# conflicts that are not about anything. Normalize to LF in the repository.
+* text=auto eol=lf
+
+# Keep the shell script LF regardless of platform, or bash will not run it.
+*.sh text eol=lf
