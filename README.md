@@ -160,6 +160,14 @@ Teknisk, for de som vil vite:
 - Innlogging skjer med `az login`, som opencode starter selv.
 - Frontend sender forespørsler til prosjektets egen backend. Backend legger ved Bjarnes systemprompt og snakker med AI-gatewayen. Nettleseren ser aldri tilgangsnøkkelen.
 
+## Lagets lokale Atlassian-søk
+
+Fanen **Ask Bjarne** i lagets hovedside gir et levende, skrivebeskyttet søk i Jira og Confluence gjennom [Atlassian Rovo MCP](https://github.com/atlassian/atlassian-mcp-server). Den som starter appen, godkjenner én egen Atlassian-innlogging i nettleseren. Det er samme konto som vanlig, men ikke den innloggingen Copilot eller opencode bruker. Ingen tilgangsnøkkel skal kopieres inn i chatten eller frontend.
+
+Kodeagenten går til `backend/`, kjører `npm install` og `npm run dev` der, og åpner adressen backend skriver ut. Den ene serveren viser både de statiske sidene og API-et på `127.0.0.1`; det trengs ingen separat frontend eller byggeprosess. Backend bruker `mcp-remote` til å opprette og fornye den lokale OAuth-tilkoblingen; innloggingen lagres i brukerens profil, ikke i Git. Ved en søkefrase henter backend oppdaterte treff som brukeren har lov til å se. Bjarne velger relevante utdrag, sammenligner dem lokalt og skriver et kort tekstsvar med klikkbare kildehenvisninger til Jira og Confluence. Hvis utdragene ikke bekrefter en eier, eller de motsier hverandre, sier han det i stedet for å gjette. Søk kan bruke Rovo-kreditter.
+
+Utdragene analyseres uten en ekstern AI-modell; søkeresultatene sendes ikke til AI-gatewayen, logges ikke og lagres ikke i repoet. De eldre snapshot-API-endepunktene krever fortsatt `LOCAL_RESEARCH_DEMO=true` og en autorisert, Git-ignorert `backend/private/evidence.json`, men har ingen egen fane i den statiske frontenden. En app som skal brukes av flere personer, trenger separat innlogging og tilgangskontroll per bruker før den kan deles eller publiseres.
+
 ## Kåringer
 
 ### 1. Beste løsning
@@ -242,5 +250,3 @@ Stopper scriptet med en melding om `GITHUB_TOKEN`, er variabelen satt i skallet 
 For hvert lag lager scriptet repoet fra malen, boardet og et GitHub-team med skrivetilgang til repoet. Deretter inviterer det deltakerne til organisasjonen på e-post, rett inn i riktig team. Invitasjonen kan godtas med hvilken som helst GitHub-konto, også en privat konto som ikke er knyttet til jobbadressen. Til slutt skriver scriptet ut teksten hvert lag skal lime inn.
 
 Send invitasjonene i god tid, så deltakerne rekker å godta dem før dagen. GitHub begrenser hvor mange invitasjoner en organisasjon kan sende per døgn. Scriptet er trygt å kjøre på nytt med en utvidet liste, og den som allerede er invitert, blir ikke invitert igjen. Hold lista utenfor repoet, fordi den inneholder personopplysninger.
-
-

@@ -3,7 +3,21 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "scripts": { "dev": "tsx watch src/server.ts", "build": "tsc --noEmit", "test": "node --import tsx --test src/*.test.ts" },
-  "dependencies": { "dotenv": "^17.2.1", "express": "^5.1.0" },
-  "devDependencies": { "@types/express": "^5.0.3", "@types/node": "^22.18.0", "tsx": "^4.20.0" }
+  "scripts": {
+    "dev": "node --watch --import tsx src/server.ts",
+    "build": "tsc --noEmit",
+    "test": "node --import tsx --test src/*.test.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "mcp-remote": "^0.14.3",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/node": "^22.18.0",
+    "tsx": "^4.20.0"
+  }
 }

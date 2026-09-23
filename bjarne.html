@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ask Bjarne — Claims Tribe Onboarding</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="bjarne.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="container">
+    <nav class="top-nav" aria-label="Claims onboarding">
+      <a class="brand" href="index.html"><img src="assets/gjensidige-logo-white.svg" alt="Gjensidige" class="brand__logo"></a>
+      <ul class="nav-links">
+        <li><a href="index.html">Mental model</a></li>
+        <li><a href="blueprint.html">Journey Blueprint</a></li>
+        <li><a href="systems.html">Systems</a></li>
+        <li><a href="experience.html">Customer Experience</a></li>
+        <li><a href="bolleforsikring.html">Bolleforsikring</a></li>
+        <li><a href="bjarne.html" class="active" aria-current="page">Ask Bjarne</a></li>
+      </ul>
+    </nav>
+    <div class="hero">
+      <h1 class="hero__title">Ask Bjarne</h1>
+      <p class="hero__intro">Live Jira and Confluence evidence, with a reluctant sigh.</p>
+      <hr class="hero__divider">
+      <div class="hero__meta">
+        <div class="hero__meta-item"><span class="hero__meta-label">Source</span><span class="hero__meta-value">Atlassian Rovo MCP</span></div>
+        <div class="hero__meta-item"><span class="hero__meta-label">Access</span><span class="hero__meta-value">Your account</span></div>
+        <div class="hero__meta-item"><span class="hero__meta-label">Mode</span><span class="hero__meta-value">Read only · local</span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="container">
+    <h2 class="page-title">Who owns what?</h2>
+    <p class="page-lede">Bjarne compares live search excerpts and cites the sources he uses. If they disagree or do not answer the question, he says so.</p>
+    <section class="bjarne-panel" aria-labelledby="bjarne-heading">
+      <h3 id="bjarne-heading" class="section-title">Ask about a system or squad</h3>
+      <p id="bjarne-status" class="bjarne-status" role="status">Connecting to Atlassian. Approve the browser prompt if it appears.</p>
+      <p id="bjarne-error" class="bjarne-error" role="alert" hidden></p>
+      <button id="bjarne-retry" class="bjarne-button bjarne-button--secondary" type="button" hidden>Reconnect Atlassian</button>
+      <form id="bjarne-form">
+        <label for="bjarne-question">Your question</label>
+        <div class="bjarne-search-row">
+          <input id="bjarne-question" name="question" maxlength="500" value="Who owns claims-selector?" required>
+          <button id="bjarne-submit" class="bjarne-button" type="submit" disabled>Ask Bjarne</button>
+        </div>
+      </form>
+      <article id="bjarne-result" class="bjarne-result" aria-live="polite" hidden>
+        <h3>What the sources say</h3>
+        <p id="bjarne-answer" class="bjarne-answer"></p>
+        <h4 id="bjarne-sources-heading" hidden>Sources</h4>
+        <ol id="bjarne-sources" aria-labelledby="bjarne-sources-heading"></ol>
+      </article>
+    </section>
+    <p class="bjarne-note">Use system and squad names, not customer, claim or employee details. Search results stay on this machine and are not sent to the AI gateway. A submitted search may consume Rovo credits.</p>
+  </div>
+</main>
+
+<footer class="site-footer"><div class="container">Local, single-user research · verify important details in the linked sources.</div></footer>
+<script src="script.js"></script>
+<script src="bjarne.js"></script>
+</body>
+</html>

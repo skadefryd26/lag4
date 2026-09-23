@@ -1,5 +1,7 @@
 # Local AI collaboration preference. Each participant creates their own copy.
 .ai/user-profile.md
+# Local IDE workspace settings.
+.idea/
 # Internal source snapshot: local demo only, never commit to public hackathon repository.
 backend/private/
 

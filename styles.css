@@ -148,6 +148,10 @@ a {
   border-bottom-color: var(--b-purple-600);
 }
 
+@media (max-width: 900px) {
+  .top-nav, .nav-links { flex-wrap: wrap; }
+}
+
 /* --- Hero block --- */
 .hero {
   padding: var(--unit-50) 0 var(--unit-40);
