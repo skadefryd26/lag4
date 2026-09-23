@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import {
-  buildWorkEvidence, formatWorkAnswer, parseJiraWorkItems, parseWorkQuestion,
+  buildSystemWorkEvidence, buildWorkEvidence, formatWorkAnswer, parseJiraWorkItems, parseWorkQuestion,
   safeFactsForGateway, selectJiraProject, type WorkItem,
 } from './current-work.js';
 
@@ -17,6 +17,8 @@ const planned = (key: string, summary: string): WorkItem => ({
 test('resolves work questions without treating ownership questions as current-work queries', () => {
   assert.deepEqual(parseWorkQuestion('What Alarm working on?'), { subject: 'Alarm' });
   assert.deepEqual(parseWorkQuestion('What is squad Alarm doing about expenses?'), { subject: 'Alarm', focus: 'expenses' });
+  assert.deepEqual(parseWorkQuestion('Squad Alarm is working on a new program to replace GoTrex'), { subject: 'Alarm', system: 'GoTrex' });
+  assert.deepEqual(parseWorkQuestion('Swuad alarm is working on a replacement for gotrex'), { subject: 'alarm', system: 'GoTrex' });
   assert.equal(parseWorkQuestion('Who owns claims-selector?'), undefined);
   assert.equal(parseWorkQuestion('What is Kari@example.invalid working on?'), undefined);
 });
@@ -103,4 +105,19 @@ test('keeps direct Jira links available when no safe topic can be inferred', () 
   assert.equal(evidence.facts.length, 0);
   assert.deepEqual(evidence.sources.map((item) => item.url), ['https://example.atlassian.net/browse/ALARM-9']);
   assert.deepEqual(safeFactsForGateway(evidence).active, []);
+});
+
+test('adds source-backed GoTrex replacement details without forwarding raw descriptions', () => {
+  const evidence = buildSystemWorkEvidence('ALARM',
+    [{ ...active('ALARM-7', 'Build a technical assistance workflow'),
+      description: 'Replace GoTrex with a new service. Contact Kari Example kari@example.invalid for fictional details.' }],
+    [{ ...planned('ALARM-8', 'Review the fictional integration'), description: 'GoTrex is referenced, but no replacement commitment.' }],
+    'https://example.atlassian.net', 'GoTrex', now,
+  );
+  const safe = JSON.stringify(safeFactsForGateway(evidence));
+  assert.match(safe, /replacing GoTrex/);
+  assert.doesNotMatch(safe, /Kari|example\.invalid|ALARM-7|https:\/\//);
+  assert.equal(evidence.facts[0].phase, 'active');
+  assert.equal(evidence.facts[1].topic, 'GoTrex-related work');
+  assert.deepEqual(evidence.sources.map((item) => item.title), ['Jira ALARM-7', 'Jira ALARM-8']);
 });

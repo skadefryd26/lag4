@@ -3,7 +3,7 @@ import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
 import { fileURLToPath } from 'node:url';
 import { composeGroundedAnswer } from './grounded-answer.js';
 import {
-  buildWorkEvidence, parseJiraWorkItems, parseWorkQuestion, selectJiraProject,
+  buildSystemWorkEvidence, buildWorkEvidence, parseJiraWorkItems, parseWorkQuestion, selectJiraProject,
   type WorkEvidence, type WorkItem, type WorkPhase,
 } from './current-work.js';
 
@@ -261,6 +261,27 @@ export class AtlassianMcp {
     }
     const project = selectJiraProject(projectData.data.values, workQuestion.subject);
     if (!project) throw new AtlassianMcpError('I could not match that name to a Jira project you can access. Try its exact name or key.', 404);
+
+    if (workQuestion.system) {
+      const jql = `project = ${project.key} AND statusCategory != Done AND (text ~ "GoTrex" OR text ~ "GoTreks") ORDER BY updated DESC`;
+      let result: unknown;
+      try {
+        result = await client.callTool({
+          name: 'searchJiraIssuesUsingJql',
+          arguments: {
+            cloudId, jql, fields: ['summary', 'description', 'status', 'updated', 'issuetype'],
+            maxResults: 20, searchResultMode: 'issues', view: 'evidence', responseContentFormat: 'markdown',
+          },
+        }, undefined, { timeout: 45_000 });
+      } catch {
+        throw new AtlassianMcpError('Jira work search failed. Check your Atlassian access.', 502);
+      }
+      const page = payloads(result).find((value) => isRecord(value) && isRecord(value.data) && Array.isArray(value.data.issues));
+      if (!isRecord(page) || !isRecord(page.data)) throw new AtlassianMcpError('Jira returned an invalid work search.', 502);
+      const active = parseJiraWorkItems(page.data.issues, project.key, 'active').items;
+      const planned = parseJiraWorkItems(page.data.issues, project.key, 'planned').items;
+      return buildSystemWorkEvidence(project.key, active, planned, this.site, workQuestion.system);
+    }
 
     const searchPage = async (phase: WorkPhase, pageToken?: string): Promise<{ items: WorkItem[]; incomplete: boolean; next?: string }> => {
       const jql = `project = ${project.key} AND statusCategory = "${phase === 'active' ? 'In Progress' : 'To Do'}" ORDER BY updated DESC`;

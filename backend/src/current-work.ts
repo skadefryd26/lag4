@@ -1,9 +1,9 @@
 import type { LiveAnswer, LiveSource } from './atlassian.js';
 
 export type WorkPhase = 'active' | 'planned';
-export type WorkQuestion = { subject: string; focus?: string };
+export type WorkQuestion = { subject: string; focus?: string; system?: 'GoTrex' | 'GoTreks' };
 export type JiraProject = { key: string; name: string };
-export type WorkItem = { key: string; summary: string; updatedAt: number; issueType: string; phase: WorkPhase };
+export type WorkItem = { key: string; summary: string; description?: string; updatedAt: number; issueType: string; phase: WorkPhase };
 export type ParsedWorkItems = { items: WorkItem[]; incomplete: boolean };
 export type SafeWorkFact = { phase: WorkPhase; topic: string; objective: string; refs: number[] };
 export type WorkEvidence = {
@@ -34,12 +34,14 @@ function normalized(value: string): string {
 }
 
 export function parseWorkQuestion(question: string): WorkQuestion | undefined {
-  const pattern = /^(?:what\s+)?(?:(?:is|are)\s+)?(?:the\s+)?(?:(?:squad|team)\s+)?([\p{L}][\p{L}\p{N}\s-]{1,48}?)\s+(?:(?:currently|right now)\s+)?(?:working on|doing|building|focused on|planning)\b/iu;
+  const pattern = /^(?:what\s+)?(?:(?:is|are)\s+)?(?:the\s+)?(?:(?:squad|swuad|team)\s+)?([\p{L}][\p{L}\p{N}\s-]{1,48}?)\s+(?:(?:is|are)\s+)?(?:(?:currently|right now)\s+)?(?:working on|doing|building|focused on|planning)\b/iu;
   const priorities = /^what\s+(?:are|is)\s+(?:the\s+)?(?:current\s+)?(?:priorities|work)\s+(?:for|of)\s+(?:(?:squad|team)\s+)?([\p{L}][\p{L}\p{N}\s-]{1,48})/iu;
-  const subject = (pattern.exec(question.trim()) ?? priorities.exec(question.trim()))?.[1]?.trim();
+  const subject = (pattern.exec(question.trim()) ?? priorities.exec(question.trim()))?.[1]?.trim().replace(/\s+(?:is|are)$/i, '');
   if (!subject) return undefined;
   const focus = topicRules.find((rule) => rule.pattern.test(question) && !rule.pattern.test(subject))?.id;
-  return { subject, ...(focus ? { focus } : {}) };
+  const system = /\bgo[\s-]?trex\b/i.test(question) ? 'GoTrex'
+    : /\bgo[\s-]?treks\b/i.test(question) ? 'GoTreks' : undefined;
+  return { subject, ...(focus ? { focus } : {}), ...(system ? { system } : {}) };
 }
 
 export function selectJiraProject(values: unknown, subject: string): JiraProject | undefined {
@@ -104,6 +106,7 @@ export function parseJiraWorkItems(values: unknown, projectKey: string, phase: W
     items.push({
       key: record.key,
       summary: entry.summary,
+      ...(typeof entry.description === 'string' ? { description: entry.description } : {}),
       updatedAt,
       issueType: typeof issueType === 'string' ? issueType : '',
       phase,
@@ -184,6 +187,26 @@ export function buildWorkEvidence(projectKey: string, active: WorkItem[], planne
   return { projectKey, ...(focus ? { focus } : {}), facts, sources, activeCount: active.length, plannedCount: planned.length, limited };
 }
 
+export function buildSystemWorkEvidence(projectKey: string, active: WorkItem[], planned: WorkItem[], site: string, system: 'GoTrex' | 'GoTreks', now = Date.now()): WorkEvidence {
+  const mentioned = /\bgo[\s-]?tre(?:x|ks)\b/i;
+  const replace = /(?:replac|erstat|migrat|utfase|phase out)[^.!?\n]{0,180}\bgo[\s-]?tre(?:x|ks)\b|\bgo[\s-]?tre(?:x|ks)\b[^.!?\n]{0,180}(?:replac|erstat|migrat|utfase|phase out)/i;
+  const relevant = (items: WorkItem[], limit: number) => items
+    .filter((item) => mentioned.test(`${item.summary} ${item.description ?? ''}`))
+    .sort((left, right) => Number(replace.test(`${right.summary} ${right.description ?? ''}`)) - Number(replace.test(`${left.summary} ${left.description ?? ''}`)) || right.updatedAt - left.updatedAt)
+    .slice(0, limit);
+  const selected = [...relevant(active, 3), ...relevant(planned.filter((item) => item.updatedAt >= now - 90 * 86_400_000), 2)];
+  const sources: LiveSource[] = [];
+  const facts = selected.map((item): SafeWorkFact => {
+    const text = `${item.summary} ${item.description ?? ''}`;
+    const replacement = replace.test(text) && !/\b(?:no|not|without|ikke|ingen)\s+(?:planned\s+)?(?:replac|erstat|migrat|utfase)/i.test(text);
+    const rule = topicRules.find((topic) => topic.pattern.test(item.summary));
+    const detail = replacement ? `replacing ${system}` : rule ? `${objective(rule, intent(item.summary))} related to ${system}` : `technical work involving ${system}`;
+    sources.push({ kind: 'jira', title: `Jira ${item.key}`, url: `${new URL(site).origin}/browse/${item.key}` });
+    return { phase: item.phase, topic: replacement ? `${system} replacement` : `${system}-related work`, objective: detail, refs: [sources.length] };
+  });
+  return { projectKey, facts, sources, activeCount: active.length, plannedCount: planned.length, limited: false };
+}
+
 export function safeFactsForGateway(evidence: WorkEvidence) {
   return {
     project: evidence.projectKey,
@@ -226,7 +249,8 @@ export function formatWorkAnswer(raw: string, evidence: WorkEvidence): LiveAnswe
       const activeTopics = new Set(factsByPhase('active').map((fact) => fact.topic));
       for (const fact of factsByPhase('planned')) {
         const pattern = topicRules.find((rule) => rule.topic === fact.topic)?.pattern;
-        if (!activeTopics.has(fact.topic) && pattern?.test(text)) {
+        const systemReplacement = fact.topic.includes(' replacement') && /replac|erstat|migrat|utfase/i.test(text) && /\bgo[\s-]?tre(?:x|ks)\b/i.test(text);
+        if (!activeTopics.has(fact.topic) && (pattern?.test(text) || systemReplacement)) {
           throw new Error('AI gateway attributed planned work to active work.');
         }
       }
