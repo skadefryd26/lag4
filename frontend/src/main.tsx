@@ -39,15 +39,16 @@ function FactList({ title, entries, empty = 'No verified detail in this snapshot
 
 function Shell() {
   const route = useRouterState({ select: (state) => state.location.pathname });
-  const isBolleforsikring = route === '/bolleforsikring';
+  const isPublicDemo = import.meta.env.VITE_PUBLIC_DEMO === 'true';
+  const isBolleforsikring = isPublicDemo || route === '/bolleforsikring';
   const { data, error, isPending } = useQuery({ queryKey: ['tribe'], queryFn: () => request<Tribe>('/api/tribe'), enabled: !isBolleforsikring });
   const navigate = useNavigate();
   const [question, setQuestion] = useState('Who owns claims-selector?');
   const ask = useMutation({ mutationFn: (value: string) => request<Answer>('/api/ask', { question: value }) });
   const [surprise, setSurprise] = useState(false);
   return <main className="shell">
-    <header className="topbar"><a href="/" className="wordmark" onClick={(event) => { event.preventDefault(); void navigate({ to: '/' }); }}>Gjensidige <span> / Claims Tribe</span></a><nav className="topnav" aria-label="Hovedmeny"><a href="/" onClick={(event) => { event.preventDefault(); void navigate({ to: '/' }); }}>Onboarding</a><a href="/bolleforsikring" onClick={(event) => { event.preventDefault(); void navigate({ to: '/bolleforsikring' }); }}>Bolleforsikring</a></nav><span className="eyebrow">FIELD GUIDE · RESEARCH PREVIEW</span></header>
-    <div className="notice" role="status">Local research demonstration. Source access reflects the researcher, not every future viewer. Never share this screen or publish this snapshot without per-user authorization.</div>
+    <header className="topbar"><a href="/" className="wordmark" onClick={(event) => { event.preventDefault(); void navigate({ to: '/' }); }}>Gjensidige <span> / Claims Tribe</span></a>{!isPublicDemo && <nav className="topnav" aria-label="Hovedmeny"><a href="/" onClick={(event) => { event.preventDefault(); void navigate({ to: '/' }); }}>Onboarding</a><a href="/bolleforsikring" onClick={(event) => { event.preventDefault(); void navigate({ to: '/bolleforsikring' }); }}>Bolleforsikring</a></nav>}<span className="eyebrow">{isPublicDemo ? 'OFFENTLIG DEMOVERSJON' : 'FIELD GUIDE · RESEARCH PREVIEW'}</span></header>
+    {!isPublicDemo && <div className="notice" role="status">Local research demonstration. Source access reflects the researcher, not every future viewer. Never share this screen or publish this snapshot without per-user authorization.</div>}
     {isBolleforsikring ? <div className="content"><Bolleforsikring /></div> : <>
     {isPending && <p role="status">Checking the evidence…</p>}
     {error && <p role="alert">{error.message}</p>}
