@@ -115,7 +115,7 @@ app.post('/api/brief', async (request, response) => {
 
 const siteRoot = fileURLToPath(new URL('../../', import.meta.url));
 const publicFiles = new Set([
-  'index.html', 'blueprint.html', 'systems.html', 'experience.html', 'bolleforsikring.html', 'bjarne.html',
+  'index.html', 'mental-model.html', 'blueprint.html', 'systems.html', 'experience.html', 'bolleforsikring.html', 'bjarne.html',
   'styles.css', 'script.js', 'bolleforsikring.js', 'bjarne.css', 'bjarne.js',
 ]);
 app.use((_request, response, next) => {
