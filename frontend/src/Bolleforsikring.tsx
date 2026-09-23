@@ -37,6 +37,19 @@ function calculateStatus(incidentDate: string): ClaimStatus {
   return 'open';
 }
 
+function getDaysSince(incidentDate: string) {
+  return Math.max(0, Math.floor((Date.now() - new Date(`${incidentDate}T12:00:00`).getTime()) / 86_400_000));
+}
+
+function Deadline({ claim }: { claim: Claim }) {
+  if (claim.status === 'settled') return <div className="deadline settled-deadline"><strong>Oppgjør registrert</strong><span>Boller mottatt. Saken er lukket, til stor overraskelse for Bjarne.</span></div>;
+  const daysSince = getDaysSince(claim.incidentDate);
+  const daysLeft = 28 - daysSince;
+  const progress = Math.min(100, (daysSince / 28) * 100);
+  const collections = daysLeft < 0;
+  return <div className={`deadline ${collections ? 'overdue' : ''}`}><div className="deadline-heading"><strong>{collections ? `Frist oversittet med ${Math.abs(daysLeft)} dager` : `${daysLeft} dager til Bolleinkasso`}</strong><span>{collections ? 'KRAVET ER DOBLET' : '4 ukers oppgjørsfrist'}</span></div><div className="timeline" aria-label={collections ? 'Fristen er passert' : `${daysLeft} dager igjen`}><i style={{ width: `${progress}%` }} /><b className={collections ? 'passed' : ''} style={{ left: `${progress}%` }} /></div><div className="timeline-labels"><span>Bot gitt<br />{formatDate(claim.incidentDate)}</span><span>Bolleinkasso<br />etter 4 uker</span></div></div>;
+}
+
 export function Bolleforsikring() {
   const [claims, setClaims] = useState(initialClaims);
   const [name, setName] = useState('');
@@ -76,13 +89,14 @@ export function Bolleforsikring() {
       <div><span>{claims.filter((claim) => claim.status === 'settled').length}</span><small>Oppgjør godkjent motvillig</small></div>
     </div>
 
-    <div className="bowl-toolbar"><div><p className="eyebrow">OFFENTLIG SAKSPORTFOLJE</p><h2>Alle vet. Ingen glemmer.</h2></div><button className="bowl-primary" onClick={() => setShowForm((value) => !value)}>{showForm ? 'Lukk registrering' : 'Registrer bollesak'}</button></div>
+    <div className="bowl-toolbar"><div><p className="eyebrow">OFFENTLIG SAKSPORTFOLJE</p><h2>Alle vet. Ingen glemmer.</h2><p className="dashboard-hint">Tidslinjen teller ned mot Bolleinkasso. Når den røde streken er passert, er det dobbelt opp.</p></div><button className="bowl-primary" onClick={() => setShowForm((value) => !value)}>{showForm ? 'Lukk registrering' : 'Registrer bollesak'}</button></div>
     {showForm && <form className="claim-form" onSubmit={registerClaim}><label>Oppdiktet navn<input value={name} onChange={(event) => setName(event.target.value)} placeholder="For eksempel Kari Kanel" maxLength={60} required /></label><label>Oppdiktet avdeling<input value={team} onChange={(event) => setTeam(event.target.value)} placeholder="For eksempel Risiko og ror" maxLength={60} required /></label><button className="bowl-primary" type="submit">Opprett sak</button></form>}
 
     <div className="claim-grid">{claims.map((claim) => <article className={`claim-card ${claim.status}`} key={claim.id}>
       <div className="claim-heading"><span className={`claim-status ${claim.status}`}>{statusLabel[claim.status]}</span>{claim.status === 'collections' && <span className="double-stamp">DOBBELT OPP</span>}</div>
       <h3>{claim.name}</h3><p className="claim-team">{claim.team}</p>
-      <dl><div><dt>Hendelse registrert</dt><dd>{formatDate(claim.incidentDate)}</dd></div><div><dt>Risikovurdering</dt><dd>{claim.status === 'collections' ? 'Kritisk: fristen ble behandlet som et forslag.' : 'Forhøyet: skjermlås er fortsatt frivillig i praksis.'}</dd></div></dl>
+      <Deadline claim={claim} />
+      <dl><div><dt>Risikovurdering</dt><dd>{claim.status === 'collections' ? 'Kritisk: fristen ble behandlet som et forslag.' : 'Forhøyet: skjermlås er fortsatt frivillig i praksis.'}</dd></div></dl>
       <p className="bjarne-note"><span aria-hidden="true">“</span>{claim.note}</p>
       {claim.status !== 'settled' ? <button className="settle-button" onClick={() => settleClaim(claim)}>Boller mottatt</button> : <span className="settled-mark">Oppgjør akseptert</span>}
     </article>)}</div>
