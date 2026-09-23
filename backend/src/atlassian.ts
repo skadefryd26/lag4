@@ -1,6 +1,7 @@
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import { fileURLToPath } from 'node:url';
+import { composeGroundedAnswer } from './grounded-answer.js';
 
 const MCP_URL = 'https://mcp.atlassian.com/v2/mcp';
 const DEFAULT_SITE = 'https://gjensidige.atlassian.net';
@@ -13,6 +14,8 @@ export type LiveAnswer = {
   state: 'sources' | 'unknown';
   mode: 'live-atlassian';
 };
+export type SearchHit = { source: LiveSource; title: string; snippet: string };
+export type SearchMatches = { hits: SearchHit[]; hasMore: boolean; partial: boolean };
 
 export class AtlassianMcpError extends Error {
   constructor(message: string, readonly statusCode: 502 | 503 = 503) {
@@ -78,47 +81,62 @@ export function cloudIdForSite(result: unknown, site: string): string {
   throw new AtlassianMcpError(`Your Atlassian account has no authorized access to ${origin}.`);
 }
 
-export function sourcesFromSearch(result: unknown, site: string): LiveSource[] {
-  const values = payloads(result);
-  const text = values.map((value) => typeof value === 'string' ? value : JSON.stringify(value)).join('\n').replaceAll('\\/', '/');
+function sourceFromUrl(raw: string, site: string): LiveSource | undefined {
   const origin = new URL(site).origin;
-  const sources: LiveSource[] = [];
-  const seen = new Set<string>();
-
-  for (const match of text.matchAll(/https:\/\/[^\s<>"'\\]+/gi)) {
-    const raw = match[0].replace(/[.,;!?)\]}]+$/, '');
-    let url: URL;
-    try {
-      url = new URL(raw);
-    } catch {
-      continue;
-    }
-    if (url.origin !== origin) continue;
-    const issue = /^\/browse\/([A-Za-z][A-Za-z0-9_]*-\d+)(?:\/|$)/.exec(url.pathname);
-    const page = /^\/wiki\/(?:spaces\/[^/]+\/pages\/(\d+)|x\/[A-Za-z0-9_-]+)/.exec(url.pathname);
-    if (!issue && !page) continue;
-    if (issue) url.pathname = `/browse/${issue[1]}`;
-    else if (page) url.pathname = page[0];
-    url.search = '';
-    url.hash = '';
-    if (seen.has(url.href)) continue;
-    seen.add(url.href);
-    sources.push({
-      kind: issue ? 'jira' : 'confluence',
-      title: issue ? `Jira ${issue[1]}` : `Confluence page${page?.[1] ? ` ${page[1]}` : ''}`,
-      url: url.href,
-    });
-    if (sources.length === 10) break;
+  let url: URL;
+  try {
+    url = new URL(raw);
+  } catch {
+    return undefined;
   }
+  if (url.origin !== origin) return undefined;
+  const issue = /^\/browse\/([A-Za-z][A-Za-z0-9_]*-\d+)(?:\/|$)/.exec(url.pathname);
+  const page = /^\/wiki\/(?:spaces\/[^/]+\/pages\/(\d+)|x\/[A-Za-z0-9_-]+)/.exec(url.pathname);
+  if (!issue && !page) return undefined;
+  if (issue) url.pathname = `/browse/${issue[1]}`;
+  else if (page) url.pathname = page[0];
+  url.search = '';
+  url.hash = '';
+  return {
+    kind: issue ? 'jira' : 'confluence',
+    title: issue ? `Jira ${issue[1]}` : `Confluence page${page?.[1] ? ` ${page[1]}` : ''}`,
+    url: url.href,
+  };
+}
 
-  if (sources.length) return sources;
-  const empty = values.some((value) =>
-    (Array.isArray(value) && value.length === 0)
-    || (isRecord(value) && (value.total === 0 || ['results', 'items', 'hits'].some((key) => Array.isArray(value[key]) && value[key].length === 0)))
-    || (typeof value === 'string' && /\b(no results|no matches|nothing found)\b/i.test(value)),
+export function matchesFromSearch(result: unknown, site: string): SearchMatches {
+  const response = payloads(result).find((value): value is Record<string, unknown> =>
+    isRecord(value) && Array.isArray(value.results),
   );
-  if (empty) return [];
-  throw new AtlassianMcpError('Atlassian returned search data without usable Jira or Confluence links.', 502);
+  if (!response || !Array.isArray(response.results)) {
+    throw new AtlassianMcpError('Atlassian returned search data without usable Jira or Confluence links.', 502);
+  }
+  const hits: SearchHit[] = [];
+  const seen = new Set<string>();
+  for (const item of response.results) {
+    if (!isRecord(item) || typeof item.url !== 'string') continue;
+    const source = sourceFromUrl(item.url, site);
+    if (!source || seen.has(source.url)) continue;
+    seen.add(source.url);
+    hits.push({
+      source,
+      title: typeof item.title === 'string' ? item.title : '',
+      snippet: typeof item.snippet === 'string' ? item.snippet : '',
+    });
+    if (hits.length === 10) break;
+  }
+  if (response.results.length > 0 && hits.length === 0 && !response.results.some((item) => isRecord(item) && typeof item.url === 'string')) {
+    throw new AtlassianMcpError('Atlassian returned search data without usable Jira or Confluence links.', 502);
+  }
+  return {
+    hits,
+    hasMore: typeof response.totalCount === 'number' && response.totalCount > hits.length,
+    partial: Array.isArray(response.warnings) && response.warnings.length > 0,
+  };
+}
+
+export function sourcesFromSearch(result: unknown, site: string): LiveSource[] {
+  return matchesFromSearch(result, site).hits.map((hit) => hit.source);
 }
 
 export class AtlassianMcp {
@@ -211,15 +229,7 @@ export class AtlassianMcp {
     } catch {
       throw new AtlassianMcpError('Atlassian search failed. Check your connection and try again.', 502);
     }
-    const sources = sourcesFromSearch(result, this.site);
-    return {
-      answer: sources.length
-        ? `I found ${sources.length} live Jira and Confluence ${sources.length === 1 ? 'source' : 'sources'}. A search hit alone does not establish ownership; follow the links to check the evidence. I know, inconveniently thorough.`
-        : 'I searched the Jira and Confluence content you can access but found no matching sources. Try a system, squad or issue name.',
-      sources,
-      state: sources.length ? 'sources' : 'unknown',
-      mode: 'live-atlassian',
-    };
+    return composeGroundedAnswer(question, matchesFromSearch(result, this.site));
   }
 
   async close(): Promise<void> {

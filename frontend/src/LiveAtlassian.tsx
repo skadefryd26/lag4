@@ -8,6 +8,17 @@ type Connection = { state: 'connected' | 'connecting' | 'disconnected' | 'error'
 type LiveSource = { kind: 'jira' | 'confluence'; title: string; url: string };
 type LiveAnswer = { answer: string; state: 'sources' | 'unknown'; sources: LiveSource[]; mode: 'live-atlassian' };
 
+function CitedAnswer({ answer, sources }: { answer: string; sources: LiveSource[] }) {
+  return <p className="live-answer-text">{answer.split(/(\[\d+\])/g).map((part, index) => {
+    const number = /^\[(\d+)\]$/.exec(part);
+    if (!number) return part;
+    const source = sources[Number(number[1]) - 1];
+    return source
+      ? <a key={index} className="live-citation" href={source.url} target="_blank" rel="noopener noreferrer" aria-label={`Source ${number[1]}: ${source.title}`}>{part}</a>
+      : part;
+  })}</p>;
+}
+
 export function LiveAtlassian() {
   const [question, setQuestion] = useState('Who owns claims-selector?');
   const connection = useQuery({
@@ -34,11 +45,11 @@ export function LiveAtlassian() {
           <label htmlFor="live-question">Ask about a squad, application, or Jira issue</label>
           <div className="live-search-row"><input id="live-question" maxLength={500} required value={question} onChange={(event) => setQuestion(event.target.value)} placeholder="Who owns claims-selector?" /><Button type="submit" disabled={!connected || ask.isPending}>Search live sources</Button></div>
         </form>
-        {ask.isPending && <p role="status" className="live-status">Bjarne is checking Jira and Confluence. A thorough sigh takes a moment.</p>}
+        {ask.isPending && <p role="status" className="live-status">Bjarne is comparing live Jira and Confluence excerpts. A thorough sigh takes a moment.</p>}
         {ask.isError && <div role="alert" className="live-error"><p>{ask.error.message}</p><Button variant="outline" onClick={() => void connection.refetch()}>Reconnect Atlassian</Button></div>}
-        {ask.data && <div className="live-answer" aria-live="polite"><Badge color={ask.data.state === 'sources' ? 'blue' : 'yellow'}>{ask.data.state === 'sources' ? 'Live sources' : 'No sources'}</Badge><p>{ask.data.answer}</p>{ask.data.sources.length > 0 && <ul>{ask.data.sources.map((source) => <li key={source.url}><a href={source.url} target="_blank" rel="noopener noreferrer">{source.title} <span aria-hidden="true">↗</span></a><small>{source.kind === 'jira' ? 'Jira' : 'Confluence'} · open to verify the detail</small></li>)}</ul>}</div>}
+        {ask.data && <div className="live-answer" aria-live="polite"><Badge color={ask.data.state === 'sources' ? 'blue' : 'yellow'}>{ask.data.state === 'sources' ? 'Cited answer' : ask.data.sources.length ? 'Not confirmed' : 'No sources'}</Badge><CitedAnswer answer={ask.data.answer} sources={ask.data.sources} />{ask.data.sources.length > 0 && <><h3>Sources</h3><ul>{ask.data.sources.map((source, index) => <li key={source.url}><a href={source.url} target="_blank" rel="noopener noreferrer">[{index + 1}] {source.title} <span aria-hidden="true">↗</span></a><small>{source.kind === 'jira' ? 'Jira' : 'Confluence'} · open to verify the full context</small></li>)}</ul></>}</div>}
       </section>
-      <p className="live-note">Search for systems and squads, not customer, claim or employee details. This reads only what your Atlassian account permits. It does not change work items, store a copy in Git, or send results to the AI gateway. A submitted search may consume Rovo credits.</p>
+      <p className="live-note">Search for systems and squads, not customer, claim or employee details. Bjarne composes his answer from live excerpts on this machine; source text is not sent to the AI gateway, logged or saved in Git. A submitted search may consume Rovo credits.</p>
     </div>
     <footer className="live-footer">One user · this machine only · live Atlassian sources</footer>
   </main>;

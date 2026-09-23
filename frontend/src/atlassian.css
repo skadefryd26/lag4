@@ -22,6 +22,9 @@
 .live-error p { margin-bottom: .75rem; }
 .live-answer { margin-top: 1.5rem; border-top: 1px solid #c9dbe9; padding-top: 1.5rem; }
 .live-answer > p { margin: 1rem 0; line-height: 1.5; }
+.live-answer-text { white-space: pre-line; }
+.live-answer h3 { font: 700 1rem Arial, sans-serif; margin: 1.25rem 0 .25rem; }
+.live-citation { display: inline-block; margin-left: .15rem; padding: .05rem .25rem; background: #eaf4ff; border-radius: 4px; }
 .live-answer ul { list-style: none; margin: 0; padding: 0; }
 .live-answer li { padding: 1rem 0; border-top: 1px solid #e1ebf2; }
 .live-answer a { font-weight: 700; color: #205d86; }
