@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Systems — Claims Tribe Onboarding</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <nav class="top-nav">
+      <a class="brand" href="index.html">
+        <img src="assets/gjensidige-logo-white.svg" alt="Gjensidige" class="brand__logo">
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Mental model</a></li>
+        <li><a href="blueprint.html">Journey Blueprint</a></li>
+        <li><a href="systems.html" class="active">Systems</a></li>
+        <li><a href="experience.html">Customer Experience</a></li>
+      </ul>
+    </nav>
+
+    <div class="hero">
+      <h1 class="hero__title">Claims Tribe Onboarding</h1>
+      <p class="hero__intro">Welcome to Claims!</p>
+      <p class="hero__intro">If you're just getting started in the Claims Tribe, you're in the right place.</p>
+      <hr class="hero__divider">
+      <div class="hero__meta">
+        <div class="hero__meta-item">
+          <span class="hero__meta-label">Level</span>
+          <span class="hero__meta-value">Everyone</span>
+        </div>
+        <div class="hero__meta-item">
+          <span class="hero__meta-label">Read time</span>
+          <span class="hero__meta-value">15 minutes</span>
+        </div>
+        <div class="hero__meta-item">
+          <span class="hero__meta-label">Version</span>
+          <span class="hero__meta-value">1.0 (20 September 2026)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="container">
+
+    <h2 class="page-title">Systems Catalogue</h2>
+    <p class="page-lede">The full claims systems reference — split into three layers by who uses each system: customers, claims handlers (Sofie), and the backend/core platforms behind the scenes. Each system includes what it's used for, where it fits in the journey, and whether it's Norway-specific, Denmark-specific, or shared.</p>
+
+    <div class="tabs" role="tablist">
+      <button class="tab-btn active" data-tab="tab-customer" role="tab" aria-selected="true">Customer-Facing <span class="tab-btn__count">11</span></button>
+      <button class="tab-btn" data-tab="tab-handler" role="tab" aria-selected="false">Handler (Sofie) <span class="tab-btn__count">9</span></button>
+      <button class="tab-btn" data-tab="tab-backend" role="tab" aria-selected="false">Backend / Core <span class="tab-btn__count">22</span></button>
+    </div>
+
+    <!-- ================= Customer-Facing ================= -->
+    <div id="tab-customer" class="tab-panel active" role="tabpanel">
+      <p class="tab-panel__intro">These are the systems customers directly interact with throughout the claims journey — to report a claim, provide information, book repairs or treatment, register expenses, receive decisions and compensation, and follow claim status.</p>
+      <div class="table-card">
+        <table class="ds-table" aria-label="Customer-facing systems, area, country and purpose">
+          <thead>
+            <tr>
+              <th scope="col">System</th>
+              <th scope="col">Area</th>
+              <th scope="col">Country</th>
+              <th scope="col">Purpose</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Claims Entry Private</td><td class="col-area">Report claim</td><td><span class="tag tag--no">NO</span></td><td>Norwegian digital claim entry for private customers, connected to S2000.</td></tr>
+            <tr><td>Claims Entry Business</td><td class="col-area">Report claim</td><td><span class="tag tag--no">NO</span></td><td>Norwegian digital claim entry for commercial customers, connected to S2000.</td></tr>
+            <tr><td>DK Private</td><td class="col-area">Report claim</td><td><span class="tag tag--dk">DK</span></td><td>Danish digital claim entry for private customers.</td></tr>
+            <tr><td>DK Commercial</td><td class="col-area">Report claim</td><td><span class="tag tag--dk">DK</span></td><td>Danish digital claim entry for commercial customers.</td></tr>
+            <tr><td>Claims Fillout</td><td class="col-area">Provide information</td><td><span class="tag tag--no">NO</span></td><td>Norwegian frontstage where detailed claim information is collected from the customer.</td></tr>
+            <tr><td>Questionnaire</td><td class="col-area">Provide information</td><td><span class="tag tag--dk">DK</span></td><td>External system collecting incident information for Danish private claims and passing it to IDIT.</td></tr>
+            <tr><td>Workshop Selector</td><td class="col-area">Find repair / treatment</td><td><span class="tag tag--shared">Shared</span></td><td>Customer-facing workshop selection for motor claims.</td></tr>
+            <tr><td>Therapist Selector</td><td class="col-area">Find repair / treatment</td><td><span class="tag tag--no">NO</span></td><td>Norwegian frontstage for selecting treatment providers.</td></tr>
+            <tr><td>Erstatning NO</td><td class="col-area">Register expenses</td><td><span class="tag tag--no">NO</span></td><td>Norwegian digital flow for registering claim-related expenses.</td></tr>
+            <tr><td>Erstatning DK</td><td class="col-area">Register expenses</td><td><span class="tag tag--dk">DK</span></td><td>Danish digital flow for registering claim-related expenses.</td></tr>
+            <tr><td>Claims Follow</td><td class="col-area">Follow claim</td><td><span class="tag tag--shared">Shared</span></td><td>Frontend application presenting claim decisions, results and follow-up information to the customer.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="tab-panel__intro" style="margin-top:16px;"><strong>Claims Communication</strong> is the communication layer connecting customers with Gjensidige and relevant third parties across the entire journey — see the Backend / Core tab.</p>
+    </div>
+
+    <!-- ================= Handler ================= -->
+    <div id="tab-handler" class="tab-panel" role="tabpanel">
+      <p class="tab-panel__intro">These are the applications used by claims handlers during manual claim processing — the Sofie corridor. Handlers use them to review claims, request missing information, assess coverage, handle exceptions, process reimbursements, communicate outcomes, and create recovery activities.</p>
+      <div class="table-card">
+        <table class="ds-table" aria-label="Handler systems, area, country and purpose">
+          <thead>
+            <tr>
+              <th scope="col">System</th>
+              <th scope="col">Area</th>
+              <th scope="col">Country</th>
+              <th scope="col">Purpose</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Dynamics</td><td class="col-area">Customer lookup &amp; activities</td><td><span class="tag tag--no">NO</span></td><td>Norwegian handler workspace for customer lookup, claims handling and creating activities (e.g. recovery).</td></tr>
+            <tr><td>Claims Assistant</td><td class="col-area">Claim assessment</td><td><span class="tag tag--shared">Shared</span></td><td>Supports manual claims handling and assessment in both Norway and Denmark.</td></tr>
+            <tr><td>Settlement Client</td><td class="col-area">Settlement processing</td><td><span class="tag tag--shared">Shared</span></td><td>Used to process manually handled claims and settlements in Norway and Denmark.</td></tr>
+            <tr><td>ProcessGuide</td><td class="col-area">Claim information management</td><td><span class="tag tag--no">NO</span></td><td>Stores claim information collected through Claims Fillout and passes it to Rule Engine.</td></tr>
+            <tr><td>Taskeladden</td><td class="col-area">Missing information collection</td><td><span class="tag tag--no">NO</span></td><td>Collects missing information required by the claims handler; only available for some products.</td></tr>
+            <tr><td>Partnerportalen</td><td class="col-area">Manual handling (NO)</td><td><span class="tag tag--no">NO</span></td><td>Handler application used in Norwegian manual claims handling.</td></tr>
+            <tr><td>Slow Chat Message Template</td><td class="col-area">Communication</td><td><span class="tag tag--shared">Shared</span></td><td>Creates the structured, standardized response sent to the customer.</td></tr>
+            <tr><td>Workshop Selector Admin</td><td class="col-area">Provider administration</td><td><span class="tag tag--shared">Shared</span></td><td>Backstage administration for workshop selection.</td></tr>
+            <tr><td>Therapist Selector Admin</td><td class="col-area">Provider administration</td><td><span class="tag tag--no">NO</span></td><td>Backstage administration supporting Therapist Selector.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="tab-panel__intro" style="margin-top:16px;"><strong>Manual Claim Handling (Sofie)</strong> is not an application itself — it's the operational process where claims requiring human assessment are handled.</p>
+    </div>
+
+    <!-- ================= Backend ================= -->
+    <div id="tab-backend" class="tab-panel" role="tabpanel">
+      <p class="tab-panel__intro">These systems store, process and govern claims data behind the scenes. Neither the customer nor the handler typically interacts with them directly.</p>
+      <div class="table-card">
+        <table class="ds-table" aria-label="Backend and core systems, area, country and purpose">
+          <thead>
+            <tr>
+              <th scope="col">System</th>
+              <th scope="col">Area</th>
+              <th scope="col">Country</th>
+              <th scope="col">Purpose</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>S2000</td><td class="col-area">Core platforms</td><td><span class="tag tag--no">NO</span></td><td>Norwegian core system storing customer information and anchoring Norwegian claims applications.</td></tr>
+            <tr><td>IDIT</td><td class="col-area">Core platforms</td><td><span class="tag tag--dk">DK</span></td><td>Danish core system storing customer and claim information and processing Danish outcomes.</td></tr>
+            <tr><td>F2100</td><td class="col-area">Core platforms</td><td><span class="tag tag--dk">DK</span></td><td>Core system storing information for Danish commercial customers; supports Property DK.</td></tr>
+            <tr><td>Rule Engine</td><td class="col-area">Rules &amp; automation</td><td><span class="tag tag--shared">Shared</span></td><td>Automated decision engine — applies rules and returns a Green, Yellow or Red outcome.</td></tr>
+            <tr><td>AI Selector</td><td class="col-area">Rules &amp; automation</td><td><span class="tag tag--no">NO</span></td><td>Incident/event selector used as an automated classifier for some Norwegian products.</td></tr>
+            <tr><td>Calculator</td><td class="col-area">Settlement processing</td><td><span class="tag tag--shared">Shared</span></td><td>Processes expense information and calculates reimbursement during payment and settlement.</td></tr>
+            <tr><td>OCR Verktøy</td><td class="col-area">Settlement processing</td><td><span class="tag tag--shared">Shared</span></td><td>Supports digital processing of expense information — reads and extracts data from receipts and documents.</td></tr>
+            <tr><td>eArkiv</td><td class="col-area">Document storage</td><td><span class="tag tag--shared">Shared</span></td><td>Stores claim documents, reports, decisions, messages and settlement-related data.</td></tr>
+            <tr><td>Claims Communication</td><td class="col-area">Communication</td><td><span class="tag tag--shared">Shared</span></td><td>Cross-journey communication layer connecting the customer, Gjensidige and relevant third parties.</td></tr>
+            <tr><td>ACE</td><td class="col-area">Telephony</td><td><span class="tag tag--shared">Shared</span></td><td>External telephone system used when customers contact Gjensidige by phone.</td></tr>
+            <tr><td>DigiCare</td><td class="col-area">External partner ecosystems</td><td><span class="tag tag--no">NO</span></td><td>External system supporting Norwegian health treatment flows.</td></tr>
+            <tr><td>Tractable</td><td class="col-area">External partner ecosystems</td><td><span class="tag tag--shared">Shared</span></td><td>External supporting application used in the motor claims flow.</td></tr>
+            <tr><td>DBS</td><td class="col-area">External partner ecosystems</td><td><span class="tag tag--no">NO</span></td><td>Supporting system for Norwegian motor claims, alongside S2000.</td></tr>
+            <tr><td>ScalePoint</td><td class="col-area">External partner ecosystems</td><td><span class="tag tag--dk">DK</span></td><td>Connected to Property DK and Danish travel claims.</td></tr>
+            <tr><td>GoTreks</td><td class="col-area">External partner ecosystems</td><td><span class="tag tag--shared">Shared</span></td><td>Used in travel claim flows in both Norway and Denmark.</td></tr>
+            <tr><td>Mekla</td><td class="col-area">External partner ecosystems</td><td><span class="tag tag--no">NO</span></td><td>Connected to Legal Aid NO.</td></tr>
+            <tr><td>Legal Aid</td><td class="col-area">External partner ecosystems</td><td><span class="tag tag--no">NO</span></td><td>Application supporting Legal Aid NO.</td></tr>
+            <tr><td>Providers Network</td><td class="col-area">External partner ecosystems</td><td><span class="tag tag--no">NO</span></td><td>Internal solution containing information about doctors and clinics, used in the Alarm flow.</td></tr>
+            <tr><td>In4mo</td><td class="col-area">External partner ecosystems</td><td><span class="tag tag--no">NO</span></td><td>Connected to Property NO.</td></tr>
+            <tr><td>UppTec NO</td><td class="col-area">External partner ecosystems</td><td><span class="tag tag--no">NO</span></td><td>Supports Property NO and acts as the Compensation Product Selector in payment and settlement.</td></tr>
+            <tr><td>BTV</td><td class="col-area">External partner ecosystems</td><td><span class="tag tag--dk">DK</span></td><td>Connected to Danish health claims.</td></tr>
+            <tr><td>Sunnhet og arbeidskade</td><td class="col-area">External partner ecosystems</td><td><span class="tag tag--dk">DK</span></td><td>Connected to Danish health claims.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">Claims Tribe Onboarding · based on the Service Blueprint Audio transcript and Blueprint Skade 2026</div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

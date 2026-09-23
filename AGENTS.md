@@ -114,6 +114,9 @@ discovered them on its own.
   on both.
 - Prefer one new file per feature. Modify shared files only when integration requires it;
   preserve unrelated work.
+- `claims-onboarding-site/` is a static reference prototype for Claims onboarding. Read its nested
+  `AGENTS.md` and the relevant page before designing or implementing related work; do not treat it
+  as the main application or replace it without an explicit request.
 - Use React + TypeScript + Vite, TanStack Router, TanStack Query, and Mantine on the frontend.
   Use Node.js + TypeScript + Express on the backend.
 - **No internal Gjensidige packages.** Anything under `@gjensidige/` — Builders

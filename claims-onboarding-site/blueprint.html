@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Blueprint — Claims Tribe Onboarding</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <nav class="top-nav">
+      <a class="brand" href="index.html">
+        <img src="assets/gjensidige-logo-white.svg" alt="Gjensidige" class="brand__logo">
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Mental model</a></li>
+        <li><a href="blueprint.html" class="active">Journey Blueprint</a></li>
+        <li><a href="systems.html">Systems</a></li>
+        <li><a href="experience.html">Customer Experience</a></li>
+      </ul>
+    </nav>
+
+    <div class="hero">
+      <h1 class="hero__title">Claims Tribe Onboarding</h1>
+      <p class="hero__intro">Welcome to Claims!</p>
+      <p class="hero__intro">If you're just getting started in the Claims Tribe, you're in the right place.</p>
+      <hr class="hero__divider">
+      <div class="hero__meta">
+        <div class="hero__meta-item">
+          <span class="hero__meta-label">Level</span>
+          <span class="hero__meta-value">Everyone</span>
+        </div>
+        <div class="hero__meta-item">
+          <span class="hero__meta-label">Read time</span>
+          <span class="hero__meta-value">15 minutes</span>
+        </div>
+        <div class="hero__meta-item">
+          <span class="hero__meta-label">Version</span>
+          <span class="hero__meta-value">1.0 (20 September 2026)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="container">
+
+    <h2 class="page-title">Service Blueprint — High-Level View</h2>
+    <p class="page-lede">A simplified swimlane view mirroring the structure of <em>Blueprint Skade 2026</em>: journey stages across the top, with Customer, Front Stage, Back Stage and Systems layers stacked below. The grid shows representative systems at a glance — expand any stage underneath for the full, exhaustive system list.</p>
+
+    <div class="legend">
+      <div class="legend__item"><span class="tag tag--customer" style="padding:2px 10px; font-size:11px;">Front Stage</span> Customer-facing systems</div>
+      <div class="legend__item"><span class="tag tag--handler" style="padding:2px 10px; font-size:11px;">Back Stage</span> Handler-facing systems</div>
+      <div class="legend__item"><span class="tag tag--backend" style="padding:2px 10px; font-size:11px;">Systems</span> Backend / core / external systems</div>
+    </div>
+
+    <div class="bp-scroll">
+      <div class="bp-grid">
+
+        <!-- Header row -->
+        <div class="bp-corner"></div>
+        <div class="bp-stage-header"><span class="bp-stage-header__num">STAGE 1</span><span class="bp-stage-header__label">Something happens</span></div>
+        <div class="bp-stage-header"><span class="bp-stage-header__num">STAGE 2</span><span class="bp-stage-header__label">Use insurance</span></div>
+        <div class="bp-stage-header"><span class="bp-stage-header__num">STAGE 3</span><span class="bp-stage-header__label">Search &amp; booking</span></div>
+        <div class="bp-stage-header"><span class="bp-stage-header__num">STAGE 4</span><span class="bp-stage-header__label">Treat and repair</span></div>
+        <div class="bp-stage-header"><span class="bp-stage-header__num">STAGE 5</span><span class="bp-stage-header__label">Payment &amp; settlement</span></div>
+        <div class="bp-stage-header"><span class="bp-stage-header__num">STAGE 6</span><span class="bp-stage-header__label">Review &amp; analyse</span></div>
+
+        <!-- Customer lane -->
+        <div class="bp-lane-label bp-lane-label--row">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0;"><path d="M21,24H19V18.957A2.96,2.96,0,0,0,16.043,16H7.957A2.96,2.96,0,0,0,5,18.957V24H3V18.957A4.963,4.963,0,0,1,7.957,14h8.086A4.963,4.963,0,0,1,21,18.957Z"/><path d="M12,12a6,6,0,1,1,6-6A6.006,6.006,0,0,1,12,12ZM12,2a4,4,0,1,0,4,4A4,4,0,0,0,12,2Z"/></svg>
+          Customer
+        </div>
+        <div class="bp-cell bp-cell--customer">
+          Notices something has happened and decides whether to use their insurance.
+          <div class="bp-cell__emotion"><span class="tag" style="background:var(--b-blue-100); color:var(--b-blue-700); border:1px solid var(--b-blue-300);">Concern · Stress</span></div>
+        </div>
+        <div class="bp-cell bp-cell--customer">
+          Reports the incident, provides details, and receives an initial decision or routing.
+          <div class="bp-cell__emotion"><span class="tag" style="background:var(--b-blue-100); color:var(--b-blue-700); border:1px solid var(--b-blue-300);">Reassured</span></div>
+        </div>
+        <div class="bp-cell bp-cell--customer">
+          Gets matched with a trusted provider and booked, without doing the coordination themselves.
+          <div class="bp-cell__emotion"><span class="tag" style="background:var(--b-blue-100); color:var(--b-blue-700); border:1px solid var(--b-blue-300);">Effortless</span></div>
+        </div>
+        <div class="bp-cell bp-cell--customer">
+          Receives the repair or treatment, staying informed throughout.
+          <div class="bp-cell__emotion"><span class="tag" style="background:var(--b-blue-100); color:var(--b-blue-700); border:1px solid var(--b-blue-300);">Trust</span></div>
+        </div>
+        <div class="bp-cell bp-cell--customer">
+          Registers expenses and receives a fast, fair settlement.
+          <div class="bp-cell__emotion"><span class="tag" style="background:var(--b-blue-100); color:var(--b-blue-700); border:1px solid var(--b-blue-300);">Fairness</span></div>
+        </div>
+        <div class="bp-cell bp-cell--customer">
+          Receives the outcome and payment, and can rate the experience.
+          <div class="bp-cell__emotion"><span class="tag" style="background:var(--b-blue-100); color:var(--b-blue-700); border:1px solid var(--b-blue-300);">Closure</span></div>
+        </div>
+
+        <!-- Front Stage lane -->
+        <div class="bp-lane-label">
+          <span class="tag tag--customer">Front Stage</span>
+          <span class="bp-lane-label__sub">Customer-facing</span>
+        </div>
+        <div class="bp-cell bp-cell--empty">—</div>
+        <div class="bp-cell">
+          <div class="tag-list">
+            <span class="tag tag--customer">Claims Entry (NO)</span>
+            <span class="tag tag--customer">DK Private / Commercial</span>
+            <span class="tag tag--customer">Claims Fillout</span>
+            <span class="tag tag--customer">Questionnaire</span>
+          </div>
+        </div>
+        <div class="bp-cell">
+          <div class="tag-list">
+            <span class="tag tag--customer">Workshop Selector</span>
+            <span class="tag tag--customer">Therapist Selector</span>
+          </div>
+        </div>
+        <div class="bp-cell bp-cell--empty">— service delivered offline —</div>
+        <div class="bp-cell">
+          <div class="tag-list">
+            <span class="tag tag--customer">Erstatning NO</span>
+            <span class="tag tag--customer">Erstatning DK</span>
+          </div>
+        </div>
+        <div class="bp-cell">
+          <div class="tag-list">
+            <span class="tag tag--customer">Claims Follow</span>
+          </div>
+        </div>
+
+        <!-- Back Stage lane -->
+        <div class="bp-lane-label">
+          <span class="tag tag--handler">Back Stage</span>
+          <span class="bp-lane-label__sub">Handler-facing (Sofie)</span>
+        </div>
+        <div class="bp-cell bp-cell--empty">—</div>
+        <div class="bp-cell">
+          <div class="tag-list">
+            <span class="tag tag--handler">Dynamics</span>
+            <span class="tag tag--handler">ProcessGuide</span>
+            <span class="tag tag--handler">Taskeladden</span>
+            <span class="tag tag--handler">Manual Claim Handling</span>
+          </div>
+        </div>
+        <div class="bp-cell">
+          <div class="tag-list">
+            <span class="tag tag--handler">Workshop Selector Admin</span>
+            <span class="tag tag--handler">Therapist Selector Admin</span>
+            <span class="tag tag--handler">Claims Handler</span>
+          </div>
+        </div>
+        <div class="bp-cell">
+          <div class="tag-list">
+            <span class="tag tag--handler">Dynamics</span>
+            <span class="tag tag--handler">Claims Assistant</span>
+            <span class="tag tag--handler">Settlement Client</span>
+          </div>
+        </div>
+        <div class="bp-cell">
+          <div class="tag-list">
+            <span class="tag tag--handler">Settlement Client</span>
+            <span class="tag tag--handler">Claims Assistant</span>
+            <span class="tag tag--handler">Dynamics (NO)</span>
+          </div>
+        </div>
+        <div class="bp-cell">
+          <div class="tag-list">
+            <span class="tag tag--handler">Claims Handler</span>
+            <span class="tag tag--handler">Slow Chat Message Template</span>
+          </div>
+        </div>
+
+        <!-- Systems lane -->
+        <div class="bp-lane-label">
+          <span class="tag tag--backend">Systems</span>
+          <span class="bp-lane-label__sub">Backend / external</span>
+        </div>
+        <div class="bp-cell bp-cell--empty">—</div>
+        <div class="bp-cell">
+          <div class="tag-list">
+            <span class="tag tag--backend">S2000</span>
+            <span class="tag tag--backend">IDIT</span>
+            <span class="tag tag--backend">F2100</span>
+            <span class="tag tag--backend">ACE</span>
+            <span class="tag tag--backend">Rule Engine</span>
+            <span class="tag tag--backend">eArkiv</span>
+          </div>
+        </div>
+        <div class="bp-cell">
+          <div class="tag-list">
+            <span class="tag tag--backend">S2000</span>
+            <span class="tag tag--backend">IDIT</span>
+            <span class="tag tag--backend">DBS</span>
+            <span class="tag tag--backend">Tractable</span>
+            <span class="tag tag--backend">DigiCare</span>
+            <span class="tag tag--backend">Providers Network</span>
+          </div>
+        </div>
+        <div class="bp-cell">
+          <div class="tag-list">
+            <span class="tag tag--backend">UppTec NO</span>
+            <span class="tag tag--backend">In4mo</span>
+            <span class="tag tag--backend">ScalePoint</span>
+            <span class="tag tag--backend">GoTreks</span>
+            <span class="tag tag--backend">Legal Aid</span>
+            <span class="tag tag--backend">Mekla</span>
+          </div>
+        </div>
+        <div class="bp-cell">
+          <div class="tag-list">
+            <span class="tag tag--backend">Calculator</span>
+            <span class="tag tag--backend">OCR Verktøy</span>
+            <span class="tag tag--backend">Rule Engine</span>
+            <span class="tag tag--backend">eArkiv</span>
+            <span class="tag tag--backend">S2000</span>
+            <span class="tag tag--backend">IDIT</span>
+          </div>
+        </div>
+        <div class="bp-cell">
+          <div class="tag-list">
+            <span class="tag tag--backend">Claims Communication</span>
+            <span class="tag tag--backend">eArkiv</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ================= Norway vs Denmark ================= -->
+    <section style="margin-top: var(--unit-50);">
+      <h3 class="section-title">Norway vs. Denmark — where they differ</h3>
+      <div class="table-card">
+        <table class="ds-table" aria-label="Norway vs Denmark system differences by journey step">
+          <thead>
+            <tr>
+              <th scope="col">Journey Step</th>
+              <th scope="col">Norway</th>
+              <th scope="col">Denmark</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Report Claim</td>
+              <td><div class="tag-list"><span class="tag tag--customer">Claims Entry Private</span><span class="tag tag--customer">Claims Entry Business</span></div></td>
+              <td><div class="tag-list"><span class="tag tag--customer">DK Private</span><span class="tag tag--customer">DK Commercial</span></div></td>
+            </tr>
+            <tr>
+              <td>Complete Claim Information</td>
+              <td><div class="tag-list"><span class="tag tag--customer">Claims Fillout</span></div></td>
+              <td><div class="tag-list"><span class="tag tag--customer">Questionnaire</span></div></td>
+            </tr>
+            <tr>
+              <td>Core system</td>
+              <td><div class="tag-list"><span class="tag tag--backend">S2000</span></div></td>
+              <td><div class="tag-list"><span class="tag tag--backend">IDIT</span><span class="tag tag--backend">F2100 (commercial)</span></div></td>
+            </tr>
+            <tr>
+              <td>Search &amp; Booking</td>
+              <td><div class="tag-list"><span class="tag tag--customer">Workshop Selector</span><span class="tag tag--customer">Therapist Selector</span></div></td>
+              <td><div class="tag-list"><span class="tag tag--customer">Workshop Selector</span></div></td>
+            </tr>
+            <tr>
+              <td>Payment &amp; Settlement</td>
+              <td><div class="tag-list"><span class="tag tag--customer">Erstatning NO</span></div></td>
+              <td><div class="tag-list"><span class="tag tag--customer">Erstatning DK</span></div></td>
+            </tr>
+            <tr>
+              <td>Follow-up</td>
+              <td><div class="tag-list"><span class="tag tag--customer">Claims Follow</span></div></td>
+              <td><div class="tag-list"><span class="tag tag--customer">Claims Follow</span></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ================= Green / Yellow / Red ================= -->
+    <section style="margin-top: var(--unit-50);">
+      <h3 class="section-title">What Green, Yellow and Red mean</h3>
+      <p style="max-width:720px; color:var(--b-blue-600);">Rule Engine assigns every claim one of three outcomes. These same three outcomes appear at both the Decision &amp; Routing step and again at Payment &amp; Settlement.</p>
+      <div class="outcome-cards">
+        <div class="outcome-card outcome-card--green">
+          <div class="outcome-card__eyebrow"><span class="outcome-card__dot"></span> Green Claims</div>
+          <h4 class="outcome-card__title">Automated Resolution</h4>
+          <p class="outcome-card__label">Claim characteristics</p>
+          <p class="outcome-card__desc">Simple, predictable, low-risk. We have all the information we need — the claim continues through automation without a handler.</p>
+        </div>
+        <div class="outcome-card outcome-card--yellow">
+          <div class="outcome-card__eyebrow"><span class="outcome-card__dot"></span> Yellow Claims</div>
+          <h4 class="outcome-card__title">Requires Manual Handling</h4>
+          <p class="outcome-card__label">Claim characteristics</p>
+          <p class="outcome-card__desc">Requires clarification, judgement or coordination — routed to a claims handler through Sofie (manual claims handling).</p>
+        </div>
+        <div class="outcome-card outcome-card--red">
+          <div class="outcome-card__eyebrow"><span class="outcome-card__dot"></span> Red Claims</div>
+          <h4 class="outcome-card__title">Automated Decline</h4>
+          <p class="outcome-card__label">Claim characteristics</p>
+          <p class="outcome-card__desc">Claims outside coverage — declined automatically. Some Red cases in Norway can still route to manual handling.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= Rule Engine routing differences ================= -->
+    <section style="margin-top: var(--unit-50);">
+      <h3 class="section-title">How Rule Engine routing differs</h3>
+      <p style="max-width:720px; color:var(--b-blue-600);">Rule Engine evaluates every claim and returns <strong>Green</strong> (continue automatically), <strong>Yellow</strong> (manual handling required) or <strong>Red</strong> (rejected) — but what happens next isn't identical in both countries:</p>
+      <div class="corridor-cards">
+        <div class="corridor-card corridor-card--eva">
+          <h3 class="corridor-card__title">Norway</h3>
+          <p class="corridor-card__desc">Yellow cases — and some Red cases — enter manual claims handling. Green cases and some standard Red cases continue directly to Slow Chat Message Template, archived in eArkiv and communicated via Claims Follow and Claims Communication.</p>
+        </div>
+        <div class="corridor-card corridor-card--frank">
+          <h3 class="corridor-card__title">Denmark</h3>
+          <p class="corridor-card__desc">Yellow cases enter manual claims handling. Green and Red cases continue to IDIT for further processing, with the result communicated to the customer through Claims Communication.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= Full detail accordion ================= -->
+    <div class="bp-detail-section">
+      <h3 class="section-title">Full system detail, by stage</h3>
+      <p class="page-lede" style="margin-bottom: var(--unit-30);">Expand a stage to see every system involved, split by who uses it. This is the complete list — the swimlane above only shows representative highlights.</p>
+
+      <!-- Stage 1 -->
+      <details class="bp-detail">
+        <summary class="bp-detail__summary">
+          <span class="bp-detail__num">Stage 1</span>
+          Something happens
+          <svg class="bp-detail__chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </summary>
+        <div class="bp-detail__body">
+          <p class="bp-detail__empty">No systems are involved yet — the customer is deciding whether to use their insurance.</p>
+        </div>
+      </details>
+
+      <!-- Stage 2: Use insurance -->
+      <details class="bp-detail" open>
+        <summary class="bp-detail__summary">
+          <span class="bp-detail__num">Stage 2</span>
+          Use insurance
+          <svg class="bp-detail__chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </summary>
+        <div class="bp-detail__body">
+
+          <div class="bp-substep">
+            <h4 class="bp-substep__title">1. Report Claim</h4>
+            <div class="bp-substep-grid">
+              <div>
+                <p class="bp-substep-col__label">Customer-facing</p>
+                <div class="tag-list">
+                  <span class="tag tag--customer">Claims Entry Private</span>
+                  <span class="tag tag--customer">Claims Entry Business</span>
+                  <span class="tag tag--customer">DK Private</span>
+                  <span class="tag tag--customer">DK Commercial</span>
+                </div>
+              </div>
+              <div>
+                <p class="bp-substep-col__label">Handler</p>
+                <div class="tag-list"><span class="tag tag--handler">Dynamics (NO customer lookup)</span></div>
+              </div>
+              <div>
+                <p class="bp-substep-col__label">Backend / Core</p>
+                <div class="tag-list">
+                  <span class="tag tag--backend">S2000 (NO)</span>
+                  <span class="tag tag--backend">IDIT (DK)</span>
+                  <span class="tag tag--backend">F2100 (DK Commercial)</span>
+                  <span class="tag tag--backend">ACE (telephony)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bp-substep">
+            <h4 class="bp-substep__title">2. Complete Information</h4>
+            <div class="bp-substep-grid">
+              <div>
+                <p class="bp-substep-col__label">Customer-facing</p>
+                <div class="tag-list">
+                  <span class="tag tag--customer">Claims Fillout (NO)</span>
+                  <span class="tag tag--customer">Questionnaire (DK)</span>
+                </div>
+              </div>
+              <div>
+                <p class="bp-substep-col__label">Handler</p>
+                <div class="tag-list">
+                  <span class="tag tag--handler">ProcessGuide</span>
+                  <span class="tag tag--handler">Taskeladden (if missing info)</span>
+                </div>
+              </div>
+              <div>
+                <p class="bp-substep-col__label">Backend / Core</p>
+                <div class="tag-list">
+                  <span class="tag tag--backend">Rule Engine</span>
+                  <span class="tag tag--backend">eArkiv</span>
+                  <span class="tag tag--backend">AI Selector</span>
+                  <span class="tag tag--backend">IDIT</span>
+                  <span class="tag tag--backend">F2100</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bp-substep">
+            <h4 class="bp-substep__title">3. Decision &amp; Routing</h4>
+            <div class="bp-substep-grid">
+              <div>
+                <p class="bp-substep-col__label">Customer-facing</p>
+                <div class="tag-list"><span class="tag tag--customer">Claims Follow</span></div>
+              </div>
+              <div>
+                <p class="bp-substep-col__label">Handler</p>
+                <div class="tag-list">
+                  <span class="tag tag--handler">Manual Claim Handling (Sofie)</span>
+                  <span class="tag tag--handler">Dynamics</span>
+                  <span class="tag tag--handler">Claims Assistant</span>
+                  <span class="tag tag--handler">Settlement Client</span>
+                </div>
+              </div>
+              <div>
+                <p class="bp-substep-col__label">Backend / Core</p>
+                <div class="tag-list">
+                  <span class="tag tag--backend">Rule Engine</span>
+                  <span class="tag tag--backend">eArkiv</span>
+                  <span class="tag tag--backend">S2000</span>
+                  <span class="tag tag--backend">IDIT</span>
+                  <span class="tag tag--backend">Slow Chat Message Template</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </details>
+
+      <!-- Stage 3: Search & booking -->
+      <details class="bp-detail">
+        <summary class="bp-detail__summary">
+          <span class="bp-detail__num">Stage 3</span>
+          Search &amp; booking
+          <svg class="bp-detail__chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </summary>
+        <div class="bp-detail__body">
+          <div class="bp-substep-grid">
+            <div>
+              <p class="bp-substep-col__label">Customer-facing</p>
+              <div class="tag-list">
+                <span class="tag tag--customer">Workshop Selector</span>
+                <span class="tag tag--customer">Therapist Selector</span>
+              </div>
+            </div>
+            <div>
+              <p class="bp-substep-col__label">Handler</p>
+              <div class="tag-list">
+                <span class="tag tag--handler">Workshop Selector Admin</span>
+                <span class="tag tag--handler">Therapist Selector Admin</span>
+                <span class="tag tag--handler">Claims Handler</span>
+              </div>
+            </div>
+            <div>
+              <p class="bp-substep-col__label">Backend / Core</p>
+              <div class="tag-list">
+                <span class="tag tag--backend">S2000</span>
+                <span class="tag tag--backend">IDIT</span>
+                <span class="tag tag--backend">DBS</span>
+                <span class="tag tag--backend">Tractable</span>
+                <span class="tag tag--backend">DigiCare</span>
+                <span class="tag tag--backend">BTV</span>
+                <span class="tag tag--backend">Sunnhet og arbeidskade</span>
+                <span class="tag tag--backend">Providers Network</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- Stage 4: Treat and repair -->
+      <details class="bp-detail">
+        <summary class="bp-detail__summary">
+          <span class="bp-detail__num">Stage 4</span>
+          Treat and repair
+          <svg class="bp-detail__chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </summary>
+        <div class="bp-detail__body">
+          <div class="bp-substep-grid">
+            <div>
+              <p class="bp-substep-col__label">Customer-facing</p>
+              <div class="tag-list"><span class="tag tag--customer">Customer receives treatment or repair</span></div>
+            </div>
+            <div>
+              <p class="bp-substep-col__label">Handler</p>
+              <div class="tag-list">
+                <span class="tag tag--handler">Dynamics</span>
+                <span class="tag tag--handler">Claims Assistant</span>
+                <span class="tag tag--handler">Settlement Client</span>
+              </div>
+            </div>
+            <div>
+              <p class="bp-substep-col__label">Backend / Core</p>
+              <div class="tag-list">
+                <span class="tag tag--backend">UppTec NO</span>
+                <span class="tag tag--backend">In4mo</span>
+                <span class="tag tag--backend">ScalePoint</span>
+                <span class="tag tag--backend">GoTreks</span>
+                <span class="tag tag--backend">Mekla</span>
+                <span class="tag tag--backend">Legal Aid</span>
+                <span class="tag tag--backend">S2000</span>
+                <span class="tag tag--backend">IDIT</span>
+                <span class="tag tag--backend">F2100</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- Stage 5: Payment & settlement -->
+      <details class="bp-detail">
+        <summary class="bp-detail__summary">
+          <span class="bp-detail__num">Stage 5</span>
+          Payment &amp; settlement
+          <svg class="bp-detail__chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </summary>
+        <div class="bp-detail__body">
+          <div class="bp-substep-grid">
+            <div>
+              <p class="bp-substep-col__label">Customer-facing</p>
+              <div class="tag-list">
+                <span class="tag tag--customer">Erstatning NO</span>
+                <span class="tag tag--customer">Erstatning DK</span>
+              </div>
+            </div>
+            <div>
+              <p class="bp-substep-col__label">Handler</p>
+              <div class="tag-list">
+                <span class="tag tag--handler">Settlement Client</span>
+                <span class="tag tag--handler">Claims Assistant</span>
+                <span class="tag tag--handler">Dynamics (NO)</span>
+              </div>
+            </div>
+            <div>
+              <p class="bp-substep-col__label">Backend / Core</p>
+              <div class="tag-list">
+                <span class="tag tag--backend">Calculator</span>
+                <span class="tag tag--backend">OCR Verktøy</span>
+                <span class="tag tag--backend">Rule Engine</span>
+                <span class="tag tag--backend">eArkiv</span>
+                <span class="tag tag--backend">S2000</span>
+                <span class="tag tag--backend">IDIT</span>
+                <span class="tag tag--backend">UppTec NO</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- Stage 6: Review & analyse -->
+      <details class="bp-detail">
+        <summary class="bp-detail__summary">
+          <span class="bp-detail__num">Stage 6</span>
+          Review &amp; analyse
+          <svg class="bp-detail__chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </summary>
+        <div class="bp-detail__body">
+
+          <div class="bp-substep">
+            <h4 class="bp-substep__title">7. Customer Communication</h4>
+            <div class="bp-substep-grid">
+              <div>
+                <p class="bp-substep-col__label">Customer-facing</p>
+                <div class="tag-list"><span class="tag tag--customer">Claims Follow</span></div>
+              </div>
+              <div>
+                <p class="bp-substep-col__label">Handler</p>
+                <div class="tag-list">
+                  <span class="tag tag--handler">Claims Handler</span>
+                  <span class="tag tag--handler">Slow Chat Message Template</span>
+                </div>
+              </div>
+              <div>
+                <p class="bp-substep-col__label">Backend / Core</p>
+                <div class="tag-list">
+                  <span class="tag tag--backend">Claims Communication</span>
+                  <span class="tag tag--backend">eArkiv</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bp-substep">
+            <h4 class="bp-substep__title">8. Review &amp; Analyse</h4>
+            <div class="bp-substep-grid">
+              <div>
+                <p class="bp-substep-col__label">Customer-facing</p>
+                <div class="tag-list"><span class="tag tag--customer">Customer feedback / rating</span></div>
+              </div>
+              <div>
+                <p class="bp-substep-col__label">Handler</p>
+                <p class="bp-detail__empty" style="margin:0;">—</p>
+              </div>
+              <div>
+                <p class="bp-substep-col__label">Backend / Core</p>
+                <div class="tag-list">
+                  <span class="tag tag--backend">Claims Communication</span>
+                  <span class="tag tag--backend">eArkiv</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </details>
+
+    </div>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">Claims Tribe Onboarding · based on the Service Blueprint Audio transcript and Blueprint Skade 2026</div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
